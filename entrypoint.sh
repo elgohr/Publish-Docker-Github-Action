@@ -8,6 +8,8 @@ if [ "${BRANCH}" = "master" ]; then
     BRANCH="latest"
 fi;
 DOCKER_REPOSITORY=$*
+echo ${DOCKER_REPOSITORY}
+
 DOCKERNAME="${DOCKER_REPOSITORY}:${BRANCH}"
 
 docker build -t ${DOCKERNAME} .
