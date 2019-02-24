@@ -9,7 +9,7 @@ action "login" {
 }
 
 action "publish" {
-  uses = "actions/publish-docker@master"
+  uses = "./"
   args = "lgohr/publish-docker-github-action"
   needs = ["login"]
 }
