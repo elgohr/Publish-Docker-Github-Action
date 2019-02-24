@@ -1,13 +1,11 @@
 #!/bin/sh -l
 
-BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
-echo ${BRANCH}
+DOCKER_REPOSITORY=$*
 
+BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
 if [ "${BRANCH}" = "master" ]; then
     BRANCH="latest"
 fi;
-DOCKER_REPOSITORY=$*
-echo ${DOCKER_REPOSITORY}
 
 DOCKERNAME="${DOCKER_REPOSITORY}:${BRANCH}"
 
