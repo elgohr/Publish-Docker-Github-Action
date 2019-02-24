@@ -1,7 +1,6 @@
 #!/bin/sh -l
 
-echo ${GITHUB_REF}
-BRANCH=$(${GITHUB_REF} | sed -e "s/refs\/heads\///g")
+BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
 echo ${BRANCH}
 
 if [ "${BRANCH}" = "master" ]; then
