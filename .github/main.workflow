@@ -1,6 +1,8 @@
 workflow "Publish Docker" {
   on = "push"
-  resolves = ["logout"]
+  resolves = [
+    "logout"
+  ]
 }
 
 action "login" {
@@ -9,7 +11,7 @@ action "login" {
 }
 
 action "publish" {
-  uses = "./"
+  uses = "elgohr/Publish-Docker-Github-Action@1.0"
   args = "lgohr/publish-docker-github-action"
   needs = ["login"]
 }
