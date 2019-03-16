@@ -1,6 +1,6 @@
 # Publishes docker containers to Dockerhub
 
-This Action for [Docker](https://www.docker.com/) uses the Git branch as the Docker tag for building and pushing the container to DockerHub.
+This Action for [Docker](https://www.docker.com/) uses the Git branch as the [Docker tag](https://docs.docker.com/engine/reference/commandline/tag/) for building and pushing the container to DockerHub.
 Hereby the master-branch is published as the latest-tag.
 
 ## Usage
