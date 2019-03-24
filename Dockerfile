@@ -1,4 +1,4 @@
-FROM docker as runtime
+FROM docker:18.09.3 as runtime
 LABEL "com.github.actions.name"="Publish Docker"
 LABEL "com.github.actions.description"="Uses the git branch as the docker tag and pushes the container"
 LABEL "com.github.actions.icon"="anchor"
