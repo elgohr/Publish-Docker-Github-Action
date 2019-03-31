@@ -28,7 +28,7 @@ workflow "Release" {
 }
 
 action "create release" {
-  uses = "elgohr/Github-Hub-Action@1.0"
-  args = "release create $(date +%Y%m%d%H%M%S)"
+  uses = "elgohr/github-release-action@1.0"
+  args = "UpdateDependencies"
   secrets = ["GITHUB_TOKEN"]
 }
