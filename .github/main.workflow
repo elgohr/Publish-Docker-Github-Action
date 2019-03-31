@@ -1,14 +1,3 @@
-workflow "Release" {
-  on = "push"
-  resolves = ["create release"]
-}
-
-action "create release" {
-  uses = "elgohr/Github-Hub-Action@1.0"
-  args = "release create $(date +%Y%m%d%H%M%S)"
-  secrets = ["GITHUB_TOKEN"]
-}
-
 workflow "Publish Docker" {
   resolves = [
     "logout",
@@ -31,4 +20,15 @@ action "logout" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   args = "logout"
   needs = ["publish"]
+}
+
+workflow "Release" {
+  on = "push"
+  resolves = ["create release"]
+}
+
+action "create release" {
+  uses = "elgohr/Github-Hub-Action@1.0"
+  args = "release create $(date +%Y%m%d%H%M%S)"
+  secrets = ["GITHUB_TOKEN"]
 }
