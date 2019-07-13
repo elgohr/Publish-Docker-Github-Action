@@ -18,7 +18,7 @@ action "login" {
 
 action "publish" {
   uses = "elgohr/Publish-Docker-Github-Action@1.0"
-  args = "docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action:latest"
+  args = "docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action"
   needs = ["login"]
 }
 
