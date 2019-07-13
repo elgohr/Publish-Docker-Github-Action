@@ -1,4 +1,4 @@
-workflow "On Push" {
+workflow "Publish" {
   resolves = [
     "logout",
   ]
@@ -6,7 +6,7 @@ workflow "On Push" {
 }
 
 action "login" {
-  uses = "actions/docker/login@8cdf801b322af5f369e00d85e9cf3a7122f49108"
+  uses = "actions/docker/login@master"
   secrets = [
     "DOCKER_USERNAME",
     "DOCKER_PASSWORD",
@@ -17,13 +17,13 @@ action "login" {
 }
 
 action "publish" {
-  uses = "elgohr/Publish-Docker-Github-Action@1.0"
+  uses = "elgohr/Publish-Docker-Github-Action@master"
   args = "docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action"
   needs = ["login"]
 }
 
 action "logout" {
-  uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
+  uses = "actions/docker/cli@master"
   args = "logout"
   needs = ["publish"]
 }
