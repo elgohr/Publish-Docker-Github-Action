@@ -24,14 +24,3 @@ action "logout" {
   args = "logout"
   needs = ["publish"]
 }
-
-workflow "Release" {
-  on = "push"
-  resolves = ["create release"]
-}
-
-action "create release" {
-  uses = "elgohr/github-release-action@1.0"
-  args = "UpdateDependencies"
-  secrets = ["GITHUB_TOKEN"]
-}
