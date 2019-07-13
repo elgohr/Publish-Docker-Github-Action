@@ -32,6 +32,10 @@ action "logout" {
 }
 ```
 
+## Docker builds
+
+Please see https://github.com/elgohr/Publish-Docker-Github-Action/packages
+
 ## Argument
 
 You need to provide the desired docker repository to the action.
