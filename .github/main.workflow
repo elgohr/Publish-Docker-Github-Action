@@ -11,7 +11,9 @@ action "login" {
     "DOCKER_USERNAME",
     "DOCKER_PASSWORD",
   ]
-  args = "docker.pkg.github.com"
+  env = {
+    DOCKER_REGISTRY_URL = "docker.pkg.github.com"
+  }
 }
 
 action "publish" {
