@@ -1,8 +1,8 @@
-workflow "Publish Docker" {
+workflow "On Push" {
   resolves = [
     "logout",
   ]
-  on = "release"
+  on = "push"
 }
 
 action "login" {
