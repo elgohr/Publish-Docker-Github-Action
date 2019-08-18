@@ -6,8 +6,26 @@ Hereby the master-branch is published as the latest-tag.
 
 ## Usage
 
-An example workflow:
+### New workflow
+```yaml
+name: Publish Docker
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Login to Registry
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        args: myDocker/repository
+    - name: Logout
+      run: docker logout
+```
 
+### Old workflow
 ```hcl
 workflow "Publish Docker" {
   on = "push"
