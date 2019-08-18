@@ -20,7 +20,7 @@ action "login" {
 }
 
 action "publish" {
-  uses = "elgohr/Publish-Docker-Github-Action@1.0"
+  uses = "elgohr/Publish-Docker-Github-Action@master"
   args = "myDocker/repository"
   needs = ["login"]
 }
