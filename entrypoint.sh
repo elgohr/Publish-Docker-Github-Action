@@ -13,14 +13,20 @@ if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
 fi;
 
 DOCKERNAME="${DOCKER_REPOSITORY}:${BRANCH}"
+CUSTOMDOCKERFILE=""
+
+if [ ! -z "${INPUT_dockerfile}" ]; then
+  CUSTOMDOCKERFILE="-f ${INPUT_dockerfile}"
+fi
+
 
 if [ "${INPUT_snapshot}" == "true" ]; then
   SHA=$(env | grep ^github\\.sha= | cut -d= -f2-) # Thank you Github for using dots in variables
   SHA_DOCKER_NAME="${DOCKER_REPOSITORY}:${SHA}"
-  docker build -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
+  docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}
 else
-  docker build -t ${DOCKERNAME} .
+  docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} .
   docker push ${DOCKERNAME}
 fi

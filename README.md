@@ -36,6 +36,15 @@ with:
   snapshot: true
 ```
 
+Use `dockerfile` when you would like to explicitly build a Dockerfile.  
+This might be useful when you have multiple DockerImages.  
+
+```yaml
+with:
+  args: myDocker/repository
+  dockerfile: MyDockerFileName
+```
+
 
 ### Old workflow
 ```hcl
