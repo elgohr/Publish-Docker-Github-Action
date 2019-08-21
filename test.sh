@@ -2,8 +2,8 @@
 
 function itPushesMasterBranchToLatest() {
   export GITHUB_REF='refs/heads/master'
-  result=$(exec /entrypoint.sh 'my/repository')
-  expected="Called mock with: build -t my/repository:latest .
+  local result=$(exec /entrypoint.sh 'my/repository')
+  local expected="Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
@@ -14,8 +14,8 @@ Called mock with: push my/repository:latest"
 
 function itPushesBranchAsNameOfTheBranch() {
   export GITHUB_REF='refs/heads/myBranch'
-  result=$(exec /entrypoint.sh 'my/repository')
-  expected="Called mock with: build -t my/repository:myBranch .
+  local result=$(exec /entrypoint.sh 'my/repository')
+  local expected="Called mock with: build -t my/repository:myBranch .
 Called mock with: push my/repository:myBranch"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
@@ -26,9 +26,23 @@ Called mock with: push my/repository:myBranch"
 
 function itPushesReleasesToLatest() {
   export GITHUB_REF='refs/tags/myRelease'
-  result=$(exec /entrypoint.sh 'my/repository')
-  expected="Called mock with: build -t my/repository:latest .
+  local result=$(exec /entrypoint.sh 'my/repository')
+  local expected="Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+}
+
+function itPushesBranchByShaInAddition() {
+  export GITHUB_REF='refs/tags/myRelease'
+  export INPUT_snapshot='true'
+  local result=$(exec env 'github.sha'=COMMIT_SHA /entrypoint.sh 'my/repository')
+  local expected="Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
+Called mock with: push my/repository:latest
+Called mock with: push my/repository:COMMIT_SHA"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -39,3 +53,4 @@ Called mock with: push my/repository:latest"
 itPushesMasterBranchToLatest
 itPushesBranchAsNameOfTheBranch
 itPushesReleasesToLatest
+itPushesBranchByShaInAddition

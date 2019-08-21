@@ -25,6 +25,17 @@ jobs:
       run: docker logout
 ```
 
+#### Optional Arguments
+
+Push an additional image, which is tagged with the git sha.
+When you would like to think about versioning images, this might be useful.
+```yaml
+with:
+  args: myDocker/repository
+  snapshot: true
+```
+
+
 ### Old workflow
 ```hcl
 workflow "Publish Docker" {

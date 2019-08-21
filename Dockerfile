@@ -18,7 +18,7 @@ FROM runtime as test
 ADD test.sh /test.sh
 ADD mock.sh /fake_bin/docker
 # Use mock instead of real docker
-ENV PATH="/bin:/fake_bin"
+ENV PATH="usr/bin:/bin:/fake_bin"
 RUN /test.sh
 
 FROM runtime
