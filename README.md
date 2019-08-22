@@ -25,9 +25,9 @@ jobs:
 
 ## Mandatory Arguments
 
-`name` is the name of the image you would like to push
-`username` the login username for the registry
-`password` the login password for the registry
+`name` is the name of the image you would like to push  
+`username` the login username for the registry  
+`password` the login password for the registry  
 
 #### Optional Arguments
 
