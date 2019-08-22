@@ -10,7 +10,7 @@ jobs:
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        args: elgohr/Publish-Docker-Github-Action
+        args: elgohr/publish-docker-github-action
         snapshot: true
     - name: Logout
       run: docker logout
