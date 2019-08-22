@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 function cleanEnvironment() {
-  unset INPUT_snapshot
-  unset INPUT_dockerfile
+  unset INPUT_SNAPSHOT
+  unset INPUT_DOCKERFILE
 }
 
 function itPushesMasterBranchToLatest() {
@@ -43,7 +43,7 @@ Called mock with: push my/repository:latest"
 
 function itPushesSpecificDockerfileReleasesToLatest() {
   export GITHUB_REF='refs/tags/myRelease'
-  export INPUT_dockerfile='MyDockerFileName'
+  export INPUT_DOCKERFILE='MyDockerFileName'
   local result=$(exec /entrypoint.sh 'my/repository')
   local expected="Called mock with: build -f MyDockerFileName -t my/repository:latest .
 Called mock with: push my/repository:latest"
@@ -57,7 +57,7 @@ Called mock with: push my/repository:latest"
 
 function itPushesBranchByShaInAddition() {
   export GITHUB_REF='refs/tags/myRelease'
-  export INPUT_snapshot='true'
+  export INPUT_SNAPSHOT='true'
   local result=$(exec env 'github.sha'=COMMIT_SHA /entrypoint.sh 'my/repository')
   local expected="Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest
@@ -72,8 +72,8 @@ Called mock with: push my/repository:COMMIT_SHA"
 
 function itPushesBranchByShaInAdditionWithSpecificDockerfile() {
   export GITHUB_REF='refs/tags/myRelease'
-  export INPUT_snapshot='true'
-  export INPUT_dockerfile='MyDockerFileName'
+  export INPUT_SNAPSHOT='true'
+  export INPUT_DOCKERFILE='MyDockerFileName'
   local result=$(exec env 'github.sha'=COMMIT_SHA /entrypoint.sh 'my/repository')
   local expected="Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest

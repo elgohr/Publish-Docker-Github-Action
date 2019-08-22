@@ -15,12 +15,12 @@ fi;
 DOCKERNAME="${DOCKER_REPOSITORY}:${BRANCH}"
 CUSTOMDOCKERFILE=""
 
-if [ ! -z "${INPUT_dockerfile}" ]; then
-  CUSTOMDOCKERFILE="-f ${INPUT_dockerfile}"
+if [ ! -z "${INPUT_DOCKERFILE}" ]; then
+  CUSTOMDOCKERFILE="-f ${INPUT_DOCKERFILE}"
 fi
 
 
-if [ "${INPUT_snapshot}" == "true" ]; then
+if [ "${INPUT_SNAPSHOT}" == "true" ]; then
   SHA=$(env | grep ^github\\.sha= | cut -d= -f2-) # Thank you Github for using dots in variables
   SHA_DOCKER_NAME="${DOCKER_REPOSITORY}:${SHA}"
   docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
