@@ -138,6 +138,42 @@ Called mock with: logout"
   cleanEnvironment
 }
 
+function itErrorsWhenNameWasNotSet() {
+  unset INPUT_NAME
+  local result=$(exec /entrypoint.sh)
+  local expected="Unable to find the repository name. Did you set with.name?"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+}
+
+function itErrorsWhenUsernameWasNotSet() {
+  export INPUT_NAME='my/repository'
+  unset INPUT_USERNAME
+  local result=$(exec /entrypoint.sh)
+  local expected="Unable to find the username. Did you set with.username?"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+}
+
+function itErrorsWhenPasswordWasNotSet() {
+  export INPUT_NAME='my/repository'
+  export INPUT_USERNAME='USERNAME'
+  unset INPUT_PASSWORD
+  local result=$(exec /entrypoint.sh)
+  local expected="Unable to find the password. Did you set with.password?"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+}
+
 itPushesMasterBranchToLatest
 itPushesBranchAsNameOfTheBranch
 itPushesReleasesToLatest
@@ -145,3 +181,6 @@ itPushesSpecificDockerfileReleasesToLatest
 itPushesBranchByShaInAddition
 itPushesBranchByShaInAdditionWithSpecificDockerfile
 itLogsIntoAnotherRegistryIfConfigured
+itErrorsWhenNameWasNotSet
+itErrorsWhenUsernameWasNotSet
+itErrorsWhenPasswordWasNotSet
