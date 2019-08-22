@@ -89,9 +89,9 @@ Called mock with: push my/repository:COMMIT_SHA"
   cleanEnvironment
 }
 
-itPushesMasterBranchToLatest
-itPushesBranchAsNameOfTheBranch
-itPushesReleasesToLatest
-itPushesSpecificDockerfileReleasesToLatest
-itPushesBranchByShaInAddition
-itPushesBranchByShaInAdditionWithSpecificDockerfile
+# itPushesMasterBranchToLatest
+# itPushesBranchAsNameOfTheBranch
+# itPushesReleasesToLatest
+# itPushesSpecificDockerfileReleasesToLatest
+# itPushesBranchByShaInAddition
+# itPushesBranchByShaInAdditionWithSpecificDockerfile

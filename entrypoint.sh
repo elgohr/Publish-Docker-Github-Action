@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cat ~/.docker/config.json
+
 DOCKER_REPOSITORY=$*
 BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
 
