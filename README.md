@@ -15,24 +15,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Login to Registry
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        args: myDocker/repository
-    - name: Logout
-      run: docker logout
+        name: myDocker/repository
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 ```
 
+## Mandatory Arguments
+
+`name` is the name of the image you would like to push
+`username` the login username for the registry
+`password` the login password for the registry
+
 #### Optional Arguments
+
+Use `registry` for pushing to a custom registry
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  registry: "docker.pkg.github.com"
+```
 
 Use `snapshot` to push an additional image, which is tagged with the git sha.  
 When you would like to think about versioning images, this might be useful.  
 
 ```yaml
 with:
-  args: myDocker/repository
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
   snapshot: true
 ```
 
@@ -41,40 +57,8 @@ This might be useful when you have multiple DockerImages.
 
 ```yaml
 with:
-  args: myDocker/repository
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
   dockerfile: MyDockerFileName
 ```
-
-
-### Old workflow
-```hcl
-workflow "Publish Docker" {
-  on = "push"
-  resolves = ["logout"]
-}
-
-action "login" {
-  uses = "actions/docker/login@master"
-  secrets = ["DOCKER_PASSWORD", "DOCKER_USERNAME"]
-}
-
-action "publish" {
-  uses = "elgohr/Publish-Docker-Github-Action@master"
-  args = "myDocker/repository"
-  needs = ["login"]
-}
-
-action "logout" {
-  uses = "actions/docker/cli@master"
-  args = "logout"
-  needs = ["publish"]
-}
-```
-
-## Docker builds
-
-Please see https://github.com/elgohr/Publish-Docker-Github-Action/packages
-
-## Argument
-
-You need to provide the desired docker repository to the action.

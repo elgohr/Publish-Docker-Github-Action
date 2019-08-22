@@ -8,9 +8,14 @@ function cleanEnvironment() {
 
 function itPushesMasterBranchToLatest() {
   export GITHUB_REF='refs/heads/master'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -t my/repository:latest .
-Called mock with: push my/repository:latest"
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -t my/repository:latest .
+Called mock with: push my/repository:latest
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -20,9 +25,14 @@ Called mock with: push my/repository:latest"
 
 function itPushesBranchAsNameOfTheBranch() {
   export GITHUB_REF='refs/heads/myBranch'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -t my/repository:myBranch .
-Called mock with: push my/repository:myBranch"
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -t my/repository:myBranch .
+Called mock with: push my/repository:myBranch
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -32,9 +42,14 @@ Called mock with: push my/repository:myBranch"
 
 function itPushesReleasesToLatest() {
   export GITHUB_REF='refs/tags/myRelease'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -t my/repository:latest .
-Called mock with: push my/repository:latest"
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -t my/repository:latest .
+Called mock with: push my/repository:latest
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -45,9 +60,14 @@ Called mock with: push my/repository:latest"
 function itPushesSpecificDockerfileReleasesToLatest() {
   export GITHUB_REF='refs/tags/myRelease'
   export INPUT_DOCKERFILE='MyDockerFileName'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -f MyDockerFileName -t my/repository:latest .
-Called mock with: push my/repository:latest"
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -f MyDockerFileName -t my/repository:latest .
+Called mock with: push my/repository:latest
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -60,10 +80,15 @@ function itPushesBranchByShaInAddition() {
   export GITHUB_REF='refs/tags/myRelease'
   export INPUT_SNAPSHOT='true'
   export GITHUB_SHA='COMMIT_SHA'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest
-Called mock with: push my/repository:COMMIT_SHA"
+Called mock with: push my/repository:COMMIT_SHA
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -77,10 +102,34 @@ function itPushesBranchByShaInAdditionWithSpecificDockerfile() {
   export INPUT_SNAPSHOT='true'
   export INPUT_DOCKERFILE='MyDockerFileName'
   export GITHUB_SHA='COMMIT_SHA'
-  local result=$(exec /entrypoint.sh 'my/repository')
-  local expected="Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:COMMIT_SHA .
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest
-Called mock with: push my/repository:COMMIT_SHA"
+Called mock with: push my/repository:COMMIT_SHA
+Called mock with: logout"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+  cleanEnvironment
+}
+
+function itLogsIntoAnotherRegistryIfConfigured() {
+  export GITHUB_REF='refs/tags/myRelease'
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_REGISTRY='https://myRegistry'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD https://myRegistry
+Called mock with: build -t my/repository:latest .
+Called mock with: push my/repository:latest
+Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
     Got: $result"
@@ -95,3 +144,4 @@ itPushesReleasesToLatest
 itPushesSpecificDockerfileReleasesToLatest
 itPushesBranchByShaInAddition
 itPushesBranchByShaInAdditionWithSpecificDockerfile
+itLogsIntoAnotherRegistryIfConfigured

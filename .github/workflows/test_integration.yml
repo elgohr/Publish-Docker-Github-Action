@@ -5,12 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Login to Registry
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        args: lgohr/publish-docker-github-action
+        name: lgohr/publish-docker-github-action
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
         snapshot: true
-    - name: Logout
-      run: docker logout
