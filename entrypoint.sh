@@ -21,8 +21,7 @@ fi
 
 
 if [ "${INPUT_SNAPSHOT}" == "true" ]; then
-  SHA=$(env | grep ^github\\.sha= | cut -d= -f2-) # Thank you Github for using dots in variables
-  SHA_DOCKER_NAME="${DOCKER_REPOSITORY}:${SHA}"
+  SHA_DOCKER_NAME="${DOCKER_REPOSITORY}:${GITHUB_SHA}"
   docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}
