@@ -12,6 +12,24 @@ function cleanEnvironment() {
   unset GITHUB_SHA
 }
 
+function itOpensPullRequest() {
+  export GITHUB_REF='refs/heads/master'
+  export GITHUB_HEAD_REF='develop'
+  export INPUT_USERNAME='USERNAME'
+  export INPUT_PASSWORD='PASSWORD'
+  export INPUT_NAME='my/repository'
+  local result=$(exec /entrypoint.sh)
+  local expected="Called mock with: login -u USERNAME -p PASSWORD
+Called mock with: build -t my/repository:develop .
+Called mock with: push my/repository:develop
+Called mock with: logout"
+  if [ "$result" != "$expected" ]; then
+    echo "Expected: $expected
+    Got: $result"
+    exit 1
+  fi
+}
+
 function itPushesMasterBranchToLatest() {
   export GITHUB_REF='refs/heads/master'
   export INPUT_USERNAME='USERNAME'

@@ -15,7 +15,14 @@ if [ -z "${INPUT_PASSWORD}" ]; then
   exit 1
 fi
 
-BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
+# We know it's a pull request when GITHUB_HEAD_REF is populated
+if [ -z "${GITHUB_HEAD_REF}" ]; then
+  # use the branch that's being merged in
+  BRANCH=${GITHUB_HEAD_REF}
+else
+  # use the branch or tag name
+  BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
+fi
 
 if [ "${BRANCH}" == "master" ]; then
   BRANCH="latest"
