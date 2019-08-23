@@ -33,7 +33,7 @@ if [ ! -z "${INPUT_DOCKERFILE}" ]; then
   CUSTOMDOCKERFILE="-f ${INPUT_DOCKERFILE}"
 fi
 
-docker login -u ${INPUT_USERNAME} -p ${INPUT_PASSWORD} ${INPUT_REGISTRY}
+echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
 if [ "${INPUT_SNAPSHOT}" == "true" ]; then
   SHA_DOCKER_NAME="${INPUT_NAME}:${GITHUB_SHA}"

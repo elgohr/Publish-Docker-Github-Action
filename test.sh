@@ -12,7 +12,7 @@ function itPushesMasterBranchToLatest() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
@@ -29,7 +29,7 @@ function itPushesBranchAsNameOfTheBranch() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -t my/repository:myBranch .
 Called mock with: push my/repository:myBranch
 Called mock with: logout"
@@ -46,7 +46,7 @@ function itPushesReleasesToLatest() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
@@ -64,7 +64,7 @@ function itPushesSpecificDockerfileReleasesToLatest() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -f MyDockerFileName -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
@@ -84,7 +84,7 @@ function itPushesBranchByShaInAddition() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:COMMIT_SHA
@@ -106,7 +106,7 @@ function itPushesBranchByShaInAdditionWithSpecificDockerfile() {
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD
+  local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:COMMIT_SHA .
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:COMMIT_SHA
@@ -126,7 +126,7 @@ function itLogsIntoAnotherRegistryIfConfigured() {
   export INPUT_REGISTRY='https://myRegistry'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
-  local expected="Called mock with: login -u USERNAME -p PASSWORD https://myRegistry
+  local expected="Called mock with: login -u USERNAME --password-stdin https://myRegistry
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
