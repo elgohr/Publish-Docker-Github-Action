@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+echo "GITHUB_REF: $GITHUB_REF"
+echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+
 function cleanEnvironment() {
   unset INPUT_SNAPSHOT
   unset INPUT_DOCKERFILE
