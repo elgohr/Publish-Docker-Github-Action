@@ -36,7 +36,9 @@ fi
 echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
 if [ "${INPUT_SNAPSHOT}" == "true" ]; then
-  SHA_DOCKER_NAME="${INPUT_NAME}:${GITHUB_SHA}"
+  timestamp=`date +%Y%m%d%H%M%S`
+  shortSha=$(echo "${GITHUB_SHA}" | cut -c1-6)
+  SHA_DOCKER_NAME="${INPUT_NAME}:${timestamp}${shortSha}"
   docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}

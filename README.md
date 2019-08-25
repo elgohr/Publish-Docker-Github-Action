@@ -41,7 +41,8 @@ with:
   registry: "docker.pkg.github.com"
 ```
 
-Use `snapshot` to push an additional image, which is tagged with the git sha.  
+Use `snapshot` to push an additional image, which is tagged with {YEAR}{MONTH}{DAY}{HOUR}{MINUTE}{SECOND}{first 6 digits of the git sha}.  
+The date was inserted to prevent new builds with external dependencies override older builds with the same sha.
 When you would like to think about versioning images, this might be useful.  
 
 ```yaml

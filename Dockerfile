@@ -16,9 +16,10 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 FROM runtime as test
 ADD test.sh /test.sh
-ADD mock.sh /fake_bin/docker
+ADD stub.sh /fake_bin/docker
+ADD mock.sh /fake_bin/date
 # Use mock instead of real docker
-ENV PATH="usr/bin:/bin:/fake_bin"
+ENV PATH="/fake_bin:usr/bin:/bin"
 RUN /test.sh
 
 FROM runtime

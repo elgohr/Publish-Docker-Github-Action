@@ -76,18 +76,19 @@ Called mock with: logout"
   cleanEnvironment
 }
 
-function itPushesBranchByShaInAddition() {
+function itPushesBranchByShaAndDateInAddition() {
   export GITHUB_REF='refs/tags/myRelease'
   export INPUT_SNAPSHOT='true'
-  export GITHUB_SHA='COMMIT_SHA'
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+  export MOCK_DATE='197001010101'
   export INPUT_USERNAME='USERNAME'
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
   local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:latest -t my/repository:COMMIT_SHA .
+Called mock with: build -t my/repository:latest -t my/repository:19700101010112169e .
 Called mock with: push my/repository:latest
-Called mock with: push my/repository:COMMIT_SHA
+Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
@@ -97,19 +98,20 @@ Called mock with: logout"
   cleanEnvironment
 }
 
-function itPushesBranchByShaInAdditionWithSpecificDockerfile() {
+function itPushesBranchByShaAndDateInAdditionWithSpecificDockerfile() {
   export GITHUB_REF='refs/tags/myRelease'
   export INPUT_SNAPSHOT='true'
   export INPUT_DOCKERFILE='MyDockerFileName'
-  export GITHUB_SHA='COMMIT_SHA'
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+  export MOCK_DATE='197001010101'
   export INPUT_USERNAME='USERNAME'
   export INPUT_PASSWORD='PASSWORD'
   export INPUT_NAME='my/repository'
   local result=$(exec /entrypoint.sh)
   local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:COMMIT_SHA .
+Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
 Called mock with: push my/repository:latest
-Called mock with: push my/repository:COMMIT_SHA
+Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
   if [ "$result" != "$expected" ]; then
     echo "Expected: $expected
@@ -178,8 +180,8 @@ itPushesMasterBranchToLatest
 itPushesBranchAsNameOfTheBranch
 itPushesReleasesToLatest
 itPushesSpecificDockerfileReleasesToLatest
-itPushesBranchByShaInAddition
-itPushesBranchByShaInAdditionWithSpecificDockerfile
+itPushesBranchByShaAndDateInAddition
+itPushesBranchByShaAndDateInAdditionWithSpecificDockerfile
 itLogsIntoAnotherRegistryIfConfigured
 itErrorsWhenNameWasNotSet
 itErrorsWhenUsernameWasNotSet
