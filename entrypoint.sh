@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 if [ -z "${INPUT_NAME}" ]; then
   echo "Unable to find the repository name. Did you set with.name?"
