@@ -27,24 +27,29 @@ if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
   BRANCH="latest"
 fi;
 
+echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+
 DOCKERNAME="${INPUT_NAME}:${BRANCH}"
-CUSTOMDOCKERFILE=""
+BUILDPARAMS=""
 
 if [ ! -z "${INPUT_DOCKERFILE}" ]; then
-  CUSTOMDOCKERFILE="-f ${INPUT_DOCKERFILE}"
+  BUILDPARAMS="$BUILDPARAMS -f ${INPUT_DOCKERFILE}"
 fi
 
-echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+if [ ! -z "${INPUT_CACHE}" ]; then
+  docker pull ${DOCKERNAME}
+  BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
+fi
 
 if [ "${INPUT_SNAPSHOT}" == "true" ]; then
   timestamp=`date +%Y%m%d%H%M%S`
   shortSha=$(echo "${GITHUB_SHA}" | cut -c1-6)
   SHA_DOCKER_NAME="${INPUT_NAME}:${timestamp}${shortSha}"
-  docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
+  docker build $BUILDPARAMS -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}
 else
-  docker build $CUSTOMDOCKERFILE -t ${DOCKERNAME} .
+  docker build $BUILDPARAMS -t ${DOCKERNAME} .
   docker push ${DOCKERNAME}
 fi
 

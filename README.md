@@ -63,3 +63,14 @@ with:
   password: ${{ secrets.DOCKER_PASSWORD }}
   dockerfile: MyDockerFileName
 ```
+
+Use `cache` when you have big images, that you would only like to build partially (changed layers).  
+> CAUTION: This will cache the non changed parts forever. If you use this option, make sure that these parts will be updated by another job!
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  cache: true
+```
