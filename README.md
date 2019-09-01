@@ -38,7 +38,7 @@ with:
   name: myDocker/repository
   username: ${{ secrets.DOCKER_USERNAME }}
   password: ${{ secrets.DOCKER_PASSWORD }}
-  registry: "docker.pkg.github.com"
+  registry: docker.pkg.github.com
 ```
 
 Use `snapshot` to push an additional image, which is tagged with {YEAR}{MONTH}{DAY}{HOUR}{MINUTE}{SECOND}{first 6 digits of the git sha}.  
