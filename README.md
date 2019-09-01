@@ -8,7 +8,7 @@ Hereby the master-branch is published as the latest-tag.
 
 ## Usage
 
-### New workflow
+## Example pipeline
 ```yaml
 name: Publish Docker
 on: [push]
@@ -31,8 +31,9 @@ jobs:
 `username` the login username for the registry  
 `password` the login password for the registry  
 
-#### Optional Arguments
+## Optional Arguments
 
+### registry
 Use `registry` for pushing to a custom registry
 
 ```yaml
@@ -43,6 +44,7 @@ with:
   registry: docker.pkg.github.com
 ```
 
+### snapshot
 Use `snapshot` to push an additional image, which is tagged with {YEAR}{MONTH}{DAY}{HOUR}{MINUTE}{SECOND}{first 6 digits of the git sha}.  
 The date was inserted to prevent new builds with external dependencies override older builds with the same sha.
 When you would like to think about versioning images, this might be useful.  
@@ -55,6 +57,7 @@ with:
   snapshot: true
 ```
 
+### dockerfile
 Use `dockerfile` when you would like to explicitly build a Dockerfile.  
 This might be useful when you have multiple DockerImages.  
 
@@ -66,6 +69,7 @@ with:
   dockerfile: MyDockerFileName
 ```
 
+### cache
 Use `cache` when you have big images, that you would only like to build partially (changed layers).  
 > CAUTION: This will cache the non changed parts forever. If you use this option, make sure that these parts will be updated by another job!
 
