@@ -27,6 +27,14 @@ if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
   BRANCH="latest"
 fi;
 
+if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]; then
+  if [ -z "${INPUT_PULL_REQUESTS}" ]; then
+    echo "The build was triggered within a pull request, but was not configured to build pull requests. Please see with.pull_requests"
+    exit 1
+  fi
+  BRANCH="pr$(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g" | sed -e "s/\///g")"
+fi;
+
 echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
 DOCKERNAME="${INPUT_NAME}:${BRANCH}"

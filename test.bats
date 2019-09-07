@@ -13,6 +13,7 @@ teardown() {
   unset INPUT_REGISTRY
   unset INPUT_CACHE
   unset GITHUB_SHA
+  unset INPUT_PULL_REQUESTS
 }
 
 @test "it pushes master branch to latest" {
@@ -24,6 +25,7 @@ teardown() {
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -36,6 +38,7 @@ Called mock with: logout"
 Called mock with: build -t my/repository:myBranch .
 Called mock with: push my/repository:myBranch
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -48,18 +51,20 @@ Called mock with: logout"
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
 @test "it pushes specific Dockerfile to latest" {
   export INPUT_DOCKERFILE='MyDockerFileName'
 
-  run /entrypoint.sh
+  run /entrypoint.sh  export GITHUB_REF='refs/heads/master'
 
   local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: build -f MyDockerFileName -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -75,6 +80,7 @@ Called mock with: build -t my/repository:latest -t my/repository:197001010101121
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -92,6 +98,7 @@ Called mock with: build --cache-from my/repository:latest -t my/repository:lates
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -108,6 +115,7 @@ Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/reposi
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -126,6 +134,7 @@ Called mock with: build -f MyDockerFileName --cache-from my/repository:latest -t
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -138,6 +147,7 @@ Called mock with: logout"
 Called mock with: build -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
+  echo $output
   [ "$output" = "$expected" ]
 }
 
@@ -151,6 +161,33 @@ Called mock with: pull my/repository:latest
 Called mock with: build --cache-from my/repository:latest -t my/repository:latest .
 Called mock with: push my/repository:latest
 Called mock with: logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "it pushes pull requests when configured" {
+  export GITHUB_REF='refs/pull/24/merge'
+  export INPUT_PULL_REQUESTS='true'
+
+  run /entrypoint.sh
+
+  local expected="Called mock with: login -u USERNAME --password-stdin
+Called mock with: build -t my/repository:pr24merge .
+Called mock with: push my/repository:pr24merge
+Called mock with: logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "it errors on pull requests when not configured" {
+  export GITHUB_REF='refs/pull/24/merge'
+  unset INPUT_PULL_REQUESTS
+
+  run /entrypoint.sh
+
+  local expected="The build was triggered within a pull request, but was not configured to build pull requests. Please see with.pull_requests"
+  echo $output
+  [ "$status" -eq 1 ]
   [ "$output" = "$expected" ]
 }
 
@@ -160,6 +197,8 @@ Called mock with: logout"
   run /entrypoint.sh
 
   local expected="Unable to find the repository name. Did you set with.name?"
+  echo $output
+  [ "$status" -eq 1 ]
   [ "$output" = "$expected" ]
 }
 
@@ -169,6 +208,8 @@ Called mock with: logout"
   run /entrypoint.sh
 
   local expected="Unable to find the username. Did you set with.username?"
+  echo $output
+  [ "$status" -eq 1 ]
   [ "$output" = "$expected" ]
 }
 
@@ -178,5 +219,7 @@ Called mock with: logout"
   run /entrypoint.sh
 
   local expected="Unable to find the password. Did you set with.password?"
+  echo $output
+  [ "$status" -eq 1 ]
   [ "$output" = "$expected" ]
 }
