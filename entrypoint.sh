@@ -18,7 +18,7 @@ fi
 
 BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
 
-if [ "${BRANCH}" == "master" ]; then
+if [ "${BRANCH}" = "master" ]; then
   BRANCH="latest"
 fi;
 
@@ -41,7 +41,7 @@ if [ ! -z "${INPUT_CACHE}" ]; then
   BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
 fi
 
-if [ "${INPUT_SNAPSHOT}" == "true" ]; then
+if [ "${INPUT_SNAPSHOT}" = "true" ]; then
   timestamp=`date +%Y%m%d%H%M%S`
   shortSha=$(echo "${GITHUB_SHA}" | cut -c1-6)
   SHA_DOCKER_NAME="${INPUT_NAME}:${timestamp}${shortSha}"
