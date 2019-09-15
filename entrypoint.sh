@@ -45,8 +45,9 @@ if [ ! -z "${INPUT_DOCKERFILE}" ]; then
 fi
 
 if [ ! -z "${INPUT_CACHE}" ]; then
-  docker pull ${DOCKERNAME}
-  BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
+  if docker pull ${DOCKERNAME} 2>/dev/null; then
+    BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
+  fi
 fi
 
 if [ "${INPUT_SNAPSHOT}" = "true" ]; then

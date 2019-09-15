@@ -14,6 +14,7 @@ teardown() {
   unset INPUT_CACHE
   unset GITHUB_SHA
   unset INPUT_PULL_REQUESTS
+  unset MOCK_ERROR_CONDITION
 }
 
 @test "it pushes master branch to latest" {
@@ -108,6 +109,25 @@ Called mock with: logout"
   local expected="Called mock with: login -u USERNAME --password-stdin
 Called mock with: pull my/repository:latest
 Called mock with: build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
+Called mock with: push my/repository:latest
+Called mock with: push my/repository:19700101010112169e
+Called mock with: logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "it does not use the cache for building when pulling the former image failed" {
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+  export MOCK_DATE='197001010101'
+  export INPUT_SNAPSHOT='true'
+  export INPUT_CACHE='true'
+  export MOCK_ERROR_CONDITION='pull my/repository:latest'
+
+  run /entrypoint.sh
+
+  local expected="Called mock with: login -u USERNAME --password-stdin
+Called mock with: pull my/repository:latest
+Called mock with: build -t my/repository:latest -t my/repository:19700101010112169e .
 Called mock with: push my/repository:latest
 Called mock with: push my/repository:19700101010112169e
 Called mock with: logout"
