@@ -14,8 +14,10 @@ RUN apk update \
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-FROM runtime as test
+FROM runtime as testEnv
 RUN apk add --no-cache coreutils bats ncurses
+
+FROM testEnv as test
 ADD test.bats /test.bats
 ADD stub.sh /fake_bin/docker
 ADD mock.sh /fake_bin/date
