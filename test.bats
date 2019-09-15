@@ -42,6 +42,19 @@ Called mock with: logout"
   [ "$output" = "$expected" ]
 }
 
+@test "it converts dashes in branch to hyphens" {
+  export GITHUB_REF='refs/heads/myBranch/withDash'
+
+  run /entrypoint.sh
+
+  local expected="Called mock with: login -u USERNAME --password-stdin
+Called mock with: build -t my/repository:myBranch-withDash .
+Called mock with: push my/repository:myBranch-withDash
+Called mock with: logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
 @test "it pushes tags to latest" {
   export GITHUB_REF='refs/tags/myRelease'
 

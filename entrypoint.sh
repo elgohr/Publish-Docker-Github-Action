@@ -16,7 +16,7 @@ if [ -z "${INPUT_PASSWORD}" ]; then
   exit 1
 fi
 
-BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g")
+BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g" | sed -e "s/\//-/g")
 
 if [ "${BRANCH}" = "master" ]; then
   BRANCH="latest"
