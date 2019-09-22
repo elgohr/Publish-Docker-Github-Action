@@ -31,6 +31,8 @@ jobs:
 `username` the login username for the registry  
 `password` the login password for the registry  
 
+> If you would like to publish the image to AWS ECR, please have a look at https://github.com/elgohr/ecr-login-action
+
 ## Optional Arguments
 
 ### registry
