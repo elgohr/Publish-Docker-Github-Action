@@ -256,3 +256,14 @@ Called /usr/local/bin/docker logout"
   [ "$status" -eq 1 ]
   [ "$output" = "$expected" ]
 }
+
+@test "it errors when the working directory is configured but not present" {
+  export INPUT_WORKDIR='mySubDir'
+
+  run /entrypoint.sh
+
+  local expected="/entrypoint.sh: cd: line 39: can't cd to mySubDir: No such file or directory"
+  echo "$output"
+  [ "$status" -eq 2 ]
+  [ "$output" = "$expected" ]
+}

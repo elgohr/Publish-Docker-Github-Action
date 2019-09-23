@@ -35,6 +35,10 @@ if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]; then
   BRANCH="pr$(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g" | sed -e "s/\///g")"
 fi;
 
+if [ ! -z "${INPUT_WORKDIR}" ]; then
+  cd "${INPUT_WORKDIR}"
+fi
+
 echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
 DOCKERNAME="${INPUT_NAME}:${BRANCH}"

@@ -71,6 +71,17 @@ with:
   dockerfile: MyDockerFileName
 ```
 
+### workdir
+Use `workdir` when you would like to change the directory for building.
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  workdir: mySubDirectory
+```
+
 ### cache
 Use `cache` when you have big images, that you would only like to build partially (changed layers).  
 > CAUTION: This will cache the non changed parts forever. If you use this option, make sure that these parts will be updated by another job!
