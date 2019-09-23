@@ -22,10 +22,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:latest .
-Called mock with: push my/repository:latest
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -35,10 +35,10 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:myBranch .
-Called mock with: push my/repository:myBranch
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:myBranch .
+Called /usr/local/bin/docker push my/repository:myBranch
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -48,10 +48,10 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:myBranch-withDash .
-Called mock with: push my/repository:myBranch-withDash
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:myBranch-withDash .
+Called /usr/local/bin/docker push my/repository:myBranch-withDash
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -61,10 +61,10 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:latest .
-Called mock with: push my/repository:latest
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -74,10 +74,10 @@ Called mock with: logout"
 
   run /entrypoint.sh  export GITHUB_REF='refs/heads/master'
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -f MyDockerFileName -t my/repository:latest .
-Called mock with: push my/repository:latest
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -89,11 +89,11 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:latest -t my/repository:19700101010112169e .
-Called mock with: push my/repository:latest
-Called mock with: push my/repository:19700101010112169e
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker push my/repository:19700101010112169e
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -106,12 +106,12 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: pull my/repository:latest
-Called mock with: build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
-Called mock with: push my/repository:latest
-Called mock with: push my/repository:19700101010112169e
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker pull my/repository:latest
+Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker push my/repository:19700101010112169e
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -125,12 +125,12 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: pull my/repository:latest
-Called mock with: build -t my/repository:latest -t my/repository:19700101010112169e .
-Called mock with: push my/repository:latest
-Called mock with: push my/repository:19700101010112169e
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker pull my/repository:latest
+Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker push my/repository:19700101010112169e
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -143,11 +143,11 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
-Called mock with: push my/repository:latest
-Called mock with: push my/repository:19700101010112169e
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker push my/repository:19700101010112169e
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -161,12 +161,12 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: pull my/repository:latest
-Called mock with: build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
-Called mock with: push my/repository:latest
-Called mock with: push my/repository:19700101010112169e
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker pull my/repository:latest
+Called /usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker push my/repository:19700101010112169e
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -176,10 +176,10 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin https://myRegistry
-Called mock with: build -t my/repository:latest .
-Called mock with: push my/repository:latest
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin https://myRegistry
+Called /usr/local/bin/docker build -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -189,11 +189,11 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: pull my/repository:latest
-Called mock with: build --cache-from my/repository:latest -t my/repository:latest .
-Called mock with: push my/repository:latest
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker pull my/repository:latest
+Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
@@ -204,10 +204,10 @@ Called mock with: logout"
 
   run /entrypoint.sh
 
-  local expected="Called mock with: login -u USERNAME --password-stdin
-Called mock with: build -t my/repository:pr24merge .
-Called mock with: push my/repository:pr24merge
-Called mock with: logout"
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:pr24merge .
+Called /usr/local/bin/docker push my/repository:pr24merge
+Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
 }
