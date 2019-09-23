@@ -19,10 +19,8 @@ RUN apk add --no-cache coreutils bats ncurses
 
 FROM testEnv as test
 ADD test.bats /test.bats
-ADD stub.sh /fake_bin/docker
-ADD mock.sh /fake_bin/date
-# Use mock instead of real docker
-ENV PATH="/fake_bin:usr/bin:/bin"
+ADD stub.sh /usr/local/bin/docker
+ADD mock.sh /usr/bin/date
 RUN /test.bats
 
 FROM runtime
