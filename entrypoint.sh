@@ -22,17 +22,18 @@ if [ "${BRANCH}" = "master" ]; then
   BRANCH="latest"
 fi;
 
-# if contains /refs/tags/
+# if it's a tag
 if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
   BRANCH="latest"
 fi;
 
+# if it's a pull request
 if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]; then
   if [ -z "${INPUT_PULL_REQUESTS}" ]; then
     echo "The build was triggered within a pull request, but was not configured to build pull requests. Please see with.pull_requests"
     exit 1
   fi
-  BRANCH="pr$(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g" | sed -e "s/\///g")"
+  BRANCH="${GITHUB_SHA}"
 fi;
 
 if [ ! -z "${INPUT_WORKDIR}" ]; then
@@ -67,5 +68,6 @@ else
   docker build $BUILDPARAMS -t ${DOCKERNAME} .
   docker push ${DOCKERNAME}
 fi
+echo ::set-output name=tag::"${BRANCH}"
 
 docker logout

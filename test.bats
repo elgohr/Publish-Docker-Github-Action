@@ -25,6 +25,7 @@ teardown() {
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -38,6 +39,7 @@ Called /usr/local/bin/docker logout"
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:myBranch .
 Called /usr/local/bin/docker push my/repository:myBranch
+::set-output name=tag::myBranch
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -51,6 +53,7 @@ Called /usr/local/bin/docker logout"
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:myBranch-withDash .
 Called /usr/local/bin/docker push my/repository:myBranch-withDash
+::set-output name=tag::myBranch-withDash
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -64,6 +67,7 @@ Called /usr/local/bin/docker logout"
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -77,6 +81,7 @@ Called /usr/local/bin/docker logout"
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -94,6 +99,7 @@ Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:1970
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
 ::set-output name=snapshot-tag::19700101010112169e
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -113,6 +119,7 @@ Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repos
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
 ::set-output name=snapshot-tag::19700101010112169e
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -133,6 +140,7 @@ Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:1970
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
 ::set-output name=snapshot-tag::19700101010112169e
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -151,6 +159,7 @@ Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
 ::set-output name=snapshot-tag::19700101010112169e
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -171,6 +180,7 @@ Called /usr/local/bin/docker build -f MyDockerFileName --cache-from my/repositor
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
 ::set-output name=snapshot-tag::19700101010112169e
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -184,6 +194,7 @@ Called /usr/local/bin/docker logout"
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin https://myRegistry
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -198,6 +209,7 @@ Called /usr/local/bin/docker logout"
 Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -205,13 +217,15 @@ Called /usr/local/bin/docker logout"
 
 @test "it pushes pull requests when configured" {
   export GITHUB_REF='refs/pull/24/merge'
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
   export INPUT_PULL_REQUESTS='true'
 
   run /entrypoint.sh
 
   local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
-Called /usr/local/bin/docker build -t my/repository:pr24merge .
-Called /usr/local/bin/docker push my/repository:pr24merge
+Called /usr/local/bin/docker build -t my/repository:12169ed809255604e557a82617264e9c373faca7 .
+Called /usr/local/bin/docker push my/repository:12169ed809255604e557a82617264e9c373faca7
+::set-output name=tag::12169ed809255604e557a82617264e9c373faca7
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -267,8 +281,5 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="/entrypoint.sh: cd: line 39: can't cd to mySubDir: No such file or directory"
-  echo "$output"
   [ "$status" -eq 2 ]
-  [ "$output" = "$expected" ]
 }
