@@ -82,7 +82,7 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
-@test "it pushes branch by sha and date in addition" {
+@test "it pushes a snapshot by sha and date in addition" {
   export INPUT_SNAPSHOT='true'
   export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
   export MOCK_DATE='197001010101'
@@ -93,6 +93,7 @@ Called /usr/local/bin/docker logout"
 Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
+::set-output name=snapshot-tag::19700101010112169e
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -111,6 +112,7 @@ Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
+::set-output name=snapshot-tag::19700101010112169e
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -130,6 +132,7 @@ Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
+::set-output name=snapshot-tag::19700101010112169e
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -147,6 +150,7 @@ Called /usr/local/bin/docker logout"
 Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
+::set-output name=snapshot-tag::19700101010112169e
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
@@ -166,6 +170,7 @@ Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
+::set-output name=snapshot-tag::19700101010112169e
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]

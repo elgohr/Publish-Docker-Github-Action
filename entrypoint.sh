@@ -55,12 +55,14 @@ if [ ! -z "${INPUT_CACHE}" ]; then
 fi
 
 if [ "${INPUT_SNAPSHOT}" = "true" ]; then
-  timestamp=`date +%Y%m%d%H%M%S`
-  shortSha=$(echo "${GITHUB_SHA}" | cut -c1-6)
-  SHA_DOCKER_NAME="${INPUT_NAME}:${timestamp}${shortSha}"
+  TIMESTAMP=`date +%Y%m%d%H%M%S`
+  SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-6)
+  SNAPSHOT_TAG="${TIMESTAMP}${SHORT_SHA}"
+  SHA_DOCKER_NAME="${INPUT_NAME}:${SNAPSHOT_TAG}"
   docker build $BUILDPARAMS -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}
+  echo ::set-output name=snapshot-tag::"${SNAPSHOT_TAG}"
 else
   docker build $BUILDPARAMS -t ${DOCKERNAME} .
   docker push ${DOCKERNAME}
