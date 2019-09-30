@@ -98,16 +98,3 @@ with:
   password: ${{ secrets.DOCKER_PASSWORD }}
   cache: true
 ```
-
-### pull_requests
-Use `pull_requests` if you would like to publish pull requests.  
-The images will be published under `pr{NUMBER_OF_PR}{ACTION_IN_REF}`  
-> CAUTION: Only activate this option, when you are really sure, that nobody will be able to do something bad in your name within the PR.
-
-```yaml
-with:
-  name: myDocker/repository
-  username: ${{ secrets.DOCKER_USERNAME }}
-  password: ${{ secrets.DOCKER_PASSWORD }}
-  pull_requests: true
-```

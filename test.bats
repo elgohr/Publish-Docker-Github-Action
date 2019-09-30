@@ -231,18 +231,6 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
-@test "it errors on pull requests when not configured" {
-  export GITHUB_REF='refs/pull/24/merge'
-  unset INPUT_PULL_REQUESTS
-
-  run /entrypoint.sh
-
-  local expected="The build was triggered within a pull request, but was not configured to build pull requests. Please see with.pull_requests"
-  echo $output
-  [ "$status" -eq 1 ]
-  [ "$output" = "$expected" ]
-}
-
 @test "it errors when with.name was not set" {
   unset INPUT_NAME
 
