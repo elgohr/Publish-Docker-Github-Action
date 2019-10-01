@@ -22,7 +22,8 @@ teardown() {
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
 ::set-output name=tag::latest
@@ -36,7 +37,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:myBranch .
 Called /usr/local/bin/docker push my/repository:myBranch
 ::set-output name=tag::myBranch
@@ -50,7 +52,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:myBranch-withDash .
 Called /usr/local/bin/docker push my/repository:myBranch-withDash
 ::set-output name=tag::myBranch-withDash
@@ -64,7 +67,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
 ::set-output name=tag::latest
@@ -78,7 +82,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh  export GITHUB_REF='refs/heads/master'
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
 ::set-output name=tag::latest
@@ -94,7 +99,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
@@ -113,7 +119,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
@@ -134,7 +141,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
@@ -154,7 +162,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
 Called /usr/local/bin/docker push my/repository:19700101010112169e
@@ -174,7 +183,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 Called /usr/local/bin/docker push my/repository:latest
@@ -191,7 +201,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin https://myRegistry
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin https://myRegistry
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
 ::set-output name=tag::latest
@@ -205,7 +216,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker pull my/repository:latest
 Called /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
@@ -222,7 +234,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:12169ed809255604e557a82617264e9c373faca7 .
 Called /usr/local/bin/docker push my/repository:12169ed809255604e557a82617264e9c373faca7
 ::set-output name=tag::12169ed809255604e557a82617264e9c373faca7
@@ -236,7 +249,8 @@ Called /usr/local/bin/docker logout"
 
   run /entrypoint.sh
 
-  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:custom-tag .
 Called /usr/local/bin/docker push my/repository:custom-tag
 ::set-output name=tag::custom-tag
@@ -253,7 +267,7 @@ Called /usr/local/bin/docker logout"
   local expected="Unable to find the repository name. Did you set with.name?"
   echo $output
   [ "$status" -eq 1 ]
-  [ "$output" = "$expected" ]
+  echo "$output" | grep "$expected"
 }
 
 @test "it errors when with.username was not set" {
@@ -264,7 +278,7 @@ Called /usr/local/bin/docker logout"
   local expected="Unable to find the username. Did you set with.username?"
   echo $output
   [ "$status" -eq 1 ]
-  [ "$output" = "$expected" ]
+  echo "$output" | grep "$expected"
 }
 
 @test "it errors when with.password was not set" {
@@ -275,7 +289,7 @@ Called /usr/local/bin/docker logout"
   local expected="Unable to find the password. Did you set with.password?"
   echo $output
   [ "$status" -eq 1 ]
-  [ "$output" = "$expected" ]
+  echo "$output" | grep "$expected"
 }
 
 @test "it errors when the working directory is configured but not present" {

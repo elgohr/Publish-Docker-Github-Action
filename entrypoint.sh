@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "" # see https://github.com/actions/toolkit/issues/168
+
 if [ -z "${INPUT_NAME}" ]; then
   echo "Unable to find the repository name. Did you set with.name?"
   exit 1
