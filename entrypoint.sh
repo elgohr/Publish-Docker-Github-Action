@@ -16,20 +16,27 @@ if [ -z "${INPUT_PASSWORD}" ]; then
   exit 1
 fi
 
-BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g" | sed -e "s/\//-/g")
-if [ "${BRANCH}" = "master" ]; then
-  BRANCH="latest"
-fi;
+function translateTag() {
+  BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g" | sed -e "s/\//-/g")
+  # if there is a tag inside the name already
+  if [ $(echo ${INPUT_NAME} | sed -e "s/://g") != ${INPUT_NAME} ]; then
+    TAG=$(echo ${INPUT_NAME} | cut -d':' -f2)
+    INPUT_NAME=$(echo ${INPUT_NAME} | cut -d':' -f1)
+  elif [ "${BRANCH}" = "master" ]; then
+    TAG="latest"
+  # if it's a tag
+  elif [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
+    TAG="latest"
+  # if it's a pull request
+  elif [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]; then
+    TAG="${GITHUB_SHA}"
+  else
+    TAG="${BRANCH}"
+  fi;
+}
 
-# if it's a tag
-if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]; then
-  BRANCH="latest"
-fi;
-
-# if it's a pull request
-if [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]; then
-  BRANCH="${GITHUB_SHA}"
-fi;
+translateTag
+DOCKERNAME="${INPUT_NAME}:${TAG}"
 
 if [ ! -z "${INPUT_WORKDIR}" ]; then
   cd "${INPUT_WORKDIR}"
@@ -37,7 +44,6 @@ fi
 
 echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
-DOCKERNAME="${INPUT_NAME}:${BRANCH}"
 BUILDPARAMS=""
 
 if [ ! -z "${INPUT_DOCKERFILE}" ]; then
@@ -63,6 +69,6 @@ else
   docker build $BUILDPARAMS -t ${DOCKERNAME} .
   docker push ${DOCKERNAME}
 fi
-echo ::set-output name=tag::"${BRANCH}"
+echo ::set-output name=tag::"${TAG}"
 
 docker logout

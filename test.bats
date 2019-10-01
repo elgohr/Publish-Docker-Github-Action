@@ -231,6 +231,20 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
+@test "it pushes to the tag if configured in the name" {
+  export INPUT_NAME='my/repository:custom-tag'
+
+  run /entrypoint.sh
+
+  local expected="Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:custom-tag .
+Called /usr/local/bin/docker push my/repository:custom-tag
+::set-output name=tag::custom-tag
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
 @test "it errors when with.name was not set" {
   unset INPUT_NAME
 

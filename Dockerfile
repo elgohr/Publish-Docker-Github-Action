@@ -16,8 +16,6 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 FROM runtime as testEnv
 RUN apk add --no-cache coreutils bats ncurses
-
-FROM testEnv as test
 ADD test.bats /test.bats
 ADD stub.sh /usr/local/bin/docker
 ADD mock.sh /usr/bin/date
