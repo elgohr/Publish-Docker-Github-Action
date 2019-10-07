@@ -259,12 +259,45 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
+@test "it uses buildargs for building, if configured" {
+  export INPUT_BUILDARGS='MY_FIRST,MY_SECOND'
+
+  run /entrypoint.sh
+
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
+::add-mask::MY_FIRST
+::add-mask::MY_SECOND
+Called /usr/local/bin/docker build --build-arg MY_FIRST --build-arg MY_SECOND -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "it uses buildargs for a single variable" {
+  export INPUT_BUILDARGS='MY_ONLY'
+
+  run /entrypoint.sh
+
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
+::add-mask::MY_ONLY
+Called /usr/local/bin/docker build --build-arg MY_ONLY -t my/repository:latest .
+Called /usr/local/bin/docker push my/repository:latest
+::set-output name=tag::latest
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
 @test "it errors when with.name was not set" {
   unset INPUT_NAME
 
   run /entrypoint.sh
 
-  local expected="Unable to find the repository name. Did you set with.name?"
+  local expected="Unable to find the name. Did you set with.name?"
   echo $output
   [ "$status" -eq 1 ]
   echo "$output" | grep "$expected"

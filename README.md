@@ -88,6 +88,23 @@ with:
   workdir: mySubDirectory
 ```
 
+### buildargs
+Use `buildargs` when you want to pass a list of environment variables as [build-args](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg). Identifiers are separated by comma.   
+All `buildargs` will be masked, so that they don't appear in the logs.  
+
+```yaml
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@master
+  env:
+    MY_FIRST: variableContent
+    MY_SECOND: variableContent
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    buildargs: MY_FIRST,MY_SECOND
+```
+
 ### cache
 Use `cache` when you have big images, that you would only like to build partially (changed layers).  
 > CAUTION: This will cache the non changed parts forever. If you use this option, make sure that these parts will be updated by another job!
