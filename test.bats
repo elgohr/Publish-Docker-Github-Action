@@ -196,15 +196,31 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
-@test "it performs a login to another registry" {
-  export INPUT_REGISTRY='https://myRegistry'
+@test "it pushes to another registry and adds the reference" {
+  export INPUT_REGISTRY='my.Registry.io'
 
   run /entrypoint.sh
 
   local expected="
-Called /usr/local/bin/docker login -u USERNAME --password-stdin https://myRegistry
-Called /usr/local/bin/docker build -t my/repository:latest .
-Called /usr/local/bin/docker push my/repository:latest
+Called /usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
+Called /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
+Called /usr/local/bin/docker push my.Registry.io/my/repository:latest
+::set-output name=tag::latest
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "it pushes to another registry and is ok when the reference is already present" {
+  export INPUT_REGISTRY='my.Registry.io'
+  export INPUT_NAME='my.Registry.io/my/repository'
+
+  run /entrypoint.sh
+
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
+Called /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
+Called /usr/local/bin/docker push my.Registry.io/my/repository:latest
 ::set-output name=tag::latest
 Called /usr/local/bin/docker logout"
   echo $output

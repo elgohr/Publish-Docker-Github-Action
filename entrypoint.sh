@@ -8,6 +8,10 @@ function main() {
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
 
+  if uses "${INPUT_REGISTRY}" && ! isPartOfTheName; then
+    INPUT_NAME="${INPUT_REGISTRY}/${INPUT_NAME}"
+  fi
+
   translateDockerTag
   DOCKERNAME="${INPUT_NAME}:${TAG}"
 
@@ -46,6 +50,10 @@ function sanitize() {
   fi
 }
 
+function isPartOfTheName() {
+  [ $(echo "${INPUT_NAME}" | sed -e "s/${INPUT_REGISTRY}//g") != "${INPUT_NAME}" ]
+}
+
 function translateDockerTag() {
   local BRANCH=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g" | sed -e "s/\//-/g")
   if hasCustomTag; then
@@ -63,7 +71,7 @@ function translateDockerTag() {
 }
 
 function hasCustomTag() {
-  [ $(echo ${INPUT_NAME} | sed -e "s/://g") != ${INPUT_NAME} ]
+  [ $(echo "${INPUT_NAME}" | sed -e "s/://g") != "${INPUT_NAME}" ]
 }
 
 function isOnMaster() {
@@ -71,11 +79,11 @@ function isOnMaster() {
 }
 
 function isGitTag() {
-  [ $(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g") != ${GITHUB_REF} ]
+  [ $(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g") != "${GITHUB_REF}" ]
 }
 
 function isPullRequest() {
-  [ $(echo ${GITHUB_REF} | sed -e "s/refs\/pull\///g") != ${GITHUB_REF} ]
+  [ $(echo "${GITHUB_REF}" | sed -e "s/refs\/pull\///g") != "${GITHUB_REF}" ]
 }
 
 function changeWorkingDirectory() {
@@ -100,11 +108,7 @@ function useBuildCache() {
 }
 
 function uses() {
-  if [ ! -z "${1}" ]; then
-    return 0
-  else
-    return 1
-  fi
+  [ ! -z "${1}" ]
 }
 
 function pushWithSnapshot() {
