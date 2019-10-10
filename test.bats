@@ -227,6 +227,22 @@ Called /usr/local/bin/docker logout"
   [ "$output" = "$expected" ]
 }
 
+@test "it pushes to another registry and removes the protocol from the reference" {
+  export INPUT_REGISTRY='https://my.Registry.io'
+  export INPUT_NAME='my/repository'
+
+  run /entrypoint.sh
+
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin https://my.Registry.io
+Called /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
+Called /usr/local/bin/docker push my.Registry.io/my/repository:latest
+::set-output name=tag::latest
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
 @test "it caches the image from a former build" {
   export INPUT_CACHE='true'
 

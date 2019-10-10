@@ -8,8 +8,9 @@ function main() {
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
 
-  if uses "${INPUT_REGISTRY}" && ! isPartOfTheName; then
-    INPUT_NAME="${INPUT_REGISTRY}/${INPUT_NAME}"
+  REGISTRY_NO_PROTOCOL=$(echo "${INPUT_REGISTRY}" | sed -e 's/^https:\/\///g')
+  if uses "${INPUT_REGISTRY}" && ! isPartOfTheName "${REGISTRY_NO_PROTOCOL}"; then
+    INPUT_NAME="${REGISTRY_NO_PROTOCOL}/${INPUT_NAME}"
   fi
 
   translateDockerTag
@@ -51,7 +52,7 @@ function sanitize() {
 }
 
 function isPartOfTheName() {
-  [ $(echo "${INPUT_NAME}" | sed -e "s/${INPUT_REGISTRY}//g") != "${INPUT_NAME}" ]
+  [ $(echo "${INPUT_NAME}" | sed -e "s/${1}//g") != "${INPUT_NAME}" ]
 }
 
 function translateDockerTag() {
