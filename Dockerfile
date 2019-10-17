@@ -1,10 +1,10 @@
 FROM docker:19.03.2 as runtime
-LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
-LABEL "maintainer"="Lars Gohr"
+LABEL "repository"="https://github.com/laeubli/Publish-Docker-Github-Action"
+LABEL "maintainer"="Samuel Läubli"
 
 RUN apk update \
   && apk upgrade \
-  && apk add --no-cache git
+  && apk add --no-cache bash openssh-client git
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

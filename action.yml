@@ -26,6 +26,9 @@ inputs:
   workdir:
     description: 'Use workdir when you would like to change the directory for building'
     required: false
+  ssh_private_key:
+    description: 'Use ssh_private_key when you would like to expose an SSH agent with a specific private keys to the build. Enables DOCKER_BUILDKIT=1 and uses --ssh default in the docker build command'
+    required: false
   buildargs:
     description: 'Use buildargs when you want to pass a list of environment variables as build-args'
     required: false

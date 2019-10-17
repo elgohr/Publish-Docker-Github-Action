@@ -88,6 +88,17 @@ with:
   workdir: mySubDirectory
 ```
 
+### SSH
+Use `ssh_private_key` when you would like to expose an SSH agent with a specific private keys to the build. Enables `DOCKER_BUILDKIT=1` and uses `--ssh default` in the `docker build` command.
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  ssh_private_key: default
+```
+
 ### buildargs
 Use `buildargs` when you want to pass a list of environment variables as [build-args](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg). Identifiers are separated by comma.   
 All `buildargs` will be masked, so that they don't appear in the logs.  

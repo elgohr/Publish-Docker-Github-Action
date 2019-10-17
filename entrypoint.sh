@@ -27,6 +27,9 @@ function main() {
   if uses "${INPUT_DOCKERFILE}"; then
     useCustomDockerfile
   fi
+  if uses "${INPUT_SSH_PRIVATE_KEY}"; then
+    useSSH
+  fi
   if uses "${INPUT_BUILDARGS}"; then
     addBuildArgs
   fi
@@ -93,6 +96,14 @@ function changeWorkingDirectory() {
 
 function useCustomDockerfile() {
   BUILDPARAMS="$BUILDPARAMS -f ${INPUT_DOCKERFILE}"
+}
+
+function useSSH() {
+  BUILDPARAMS="$BUILDPARAMS --ssh default"
+  eval `ssh-agent -s`
+  mkdir -p $HOME/.ssh
+  bash -c 'ssh-add <(echo "${INPUT_SSH_PRIVATE_KEY}")'
+  export "DOCKER_BUILDKIT=1"
 }
 
 function addBuildArgs() {
