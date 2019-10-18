@@ -116,3 +116,15 @@ with:
   password: ${{ secrets.DOCKER_PASSWORD }}
   cache: true
 ```
+
+### tag_names
+Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
+> CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  tag_names: true
+```

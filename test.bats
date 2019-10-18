@@ -8,6 +8,7 @@ setup(){
 }
 
 teardown() {
+  unset INPUT_TAG_NAMES
   unset INPUT_SNAPSHOT
   unset INPUT_DOCKERFILE
   unset INPUT_REGISTRY
@@ -72,6 +73,22 @@ Called /usr/local/bin/docker login -u USERNAME --password-stdin
 Called /usr/local/bin/docker build -t my/repository:latest .
 Called /usr/local/bin/docker push my/repository:latest
 ::set-output name=tag::latest
+Called /usr/local/bin/docker logout"
+  echo $output
+  [ "$output" = "$expected" ]
+}
+
+@test "with tag names it pushes tags using the name" {
+  export GITHUB_REF='refs/tags/myRelease'
+  export INPUT_TAG_NAMES=true
+
+  run /entrypoint.sh
+
+  local expected="
+Called /usr/local/bin/docker login -u USERNAME --password-stdin
+Called /usr/local/bin/docker build -t my/repository:myRelease .
+Called /usr/local/bin/docker push my/repository:myRelease
+::set-output name=tag::myRelease
 Called /usr/local/bin/docker logout"
   echo $output
   [ "$output" = "$expected" ]
