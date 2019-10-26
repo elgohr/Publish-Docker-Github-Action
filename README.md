@@ -107,7 +107,7 @@ All `buildargs` will be masked, so that they don't appear in the logs.
 
 ### cache
 Use `cache` when you have big images, that you would only like to build partially (changed layers).  
-> CAUTION: This will cache the non changed parts forever. If you use this option, make sure that these parts will be updated by another job!
+> CAUTION: Docker builds cache non-repoducable commands such as installing packages. If you use this option, your packages will never update. To avoid this, run this action on a schedule with caching **disabled** to rebuild the cache periodically.
 
 ```yaml
 with:
