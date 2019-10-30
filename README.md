@@ -117,6 +117,32 @@ with:
   cache: true
 ```
 
+You can use [GitHub Actions Expression Syntax](https://help.github.com/en/github/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions) to determine whether or not to use cache depending on the action context. For example, you can use the cache on pushes for faster builds, while also having a scheduled full build to rebuild the cache periodically:
+
+```yaml
+name: Publish Docker
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # Weekly on Sundays at 02:00
+    - cron: '0 2 * * 0'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: myDocker/repository
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        # Cache everything except scheduled builds
+        cache: github.event_name != 'schedule'
+```
+
 ### tag_names
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
