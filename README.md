@@ -41,11 +41,12 @@ jobs:
 ## Optional Arguments
 
 ### registry
-Use `registry` for pushing to a custom registry
+Use `registry` for pushing to a custom registry.
+> NOTE: GitHub's Docker registry uses a different path format to Docker Hub, as shown below. See [Configuring Docker for use with GitHub Package Registry](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-docker-for-use-with-github-package-registry#publishing-a-package) for more information.
 
 ```yaml
 with:
-  name: myDocker/repository
+  name: owner/repository/image
   username: ${{ secrets.DOCKER_USERNAME }}
   password: ${{ secrets.DOCKER_PASSWORD }}
   registry: docker.pkg.github.com
