@@ -31,7 +31,12 @@ function main() {
     addBuildArgs
   fi
   if uses "${INPUT_CACHE}"; then
-    useBuildCache
+    if isDeprecated "${INPUT_CACHE}"; then
+      echo "Warning: Your build is using the deprecated INPUT_CACHE=true, please upgrade to a specific retention time as this feature will be removed in 3.x (see https://github.com/elgohr/Publish-Docker-Github-Action/tree/master#cache)"
+      useBuildCache
+    else
+      useNewBuildCache
+    fi
   fi
 
   if uses "${INPUT_SNAPSHOT}"; then
@@ -108,6 +113,34 @@ function useBuildCache() {
   if docker pull ${DOCKERNAME} 2>/dev/null; then
     BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
   fi
+}
+
+function useNewBuildCache() {
+  if docker pull ${DOCKERNAME} 2>/dev/null; then
+    if inRetentionPeriod; then
+        BUILDPARAMS="$BUILDPARAMS --cache-from ${DOCKERNAME}"
+    else
+      echo "Retention period has been exceeded. Building without cache."
+    fi
+  fi
+}
+
+function inRetentionPeriod() {
+  local HISTORY=$(docker history -H=false ${DOCKERNAME})
+
+  local HISTORY_TIMESTAMP=$(echo "${HISTORY}" | sed -n 2p | tr -s ' ' | cut -d' ' -f2 | cut -d'T' -f1 | sed 's/-//g')
+  local TIMESTAMP=`date +%Y%m%d`
+
+  local HISTORY_TIMESTAMP_EPOCH=$(date -d "${HISTORY_TIMESTAMP}" +"%s")
+  local TIMESTAMP_EPOCH=$(date -d "${TIMESTAMP}" +"%s")
+
+  local RETENTION_PERIOD=$(($HISTORY_TIMESTAMP_EPOCH + ${INPUT_CACHE} * 3600))
+
+  [ $RETENTION_PERIOD -gt $TIMESTAMP_EPOCH ]
+}
+
+function isDeprecated() {
+  [ "${1}" = "true" ]
 }
 
 function uses() {

@@ -3,8 +3,13 @@
 setup(){
   cat /dev/null >| mockCalledWith
 
+  currentYear=`date +%Y`
+  nextYear=$(($currentYear+1))
   declare -A -p MOCK_RETURNS=(
   ['/usr/local/bin/docker']=""
+  ['/usr/local/bin/docker history']="IMAGE               CREATED AT                  CREATED BY                                      SIZE                COMMENT
+cf0f3ca922e0        $nextYear-10-18T20:48:51+02:00   /bin/sh -c #(nop)  CMD ['/bin/bash']            0
+<missing>           2019-10-18T20:48:51+02:00   /bin/sh -c mkdir -p /run/systemd && echo 'do…   7"
   ) > mockReturns
 
   export GITHUB_REF='refs/heads/master'
@@ -113,65 +118,56 @@ teardown() {
   export INPUT_SNAPSHOT='true'
   export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
 
-  declare -A -p MOCK_RETURNS=(
-  ['/usr/local/bin/docker']=""
-  ['/usr/bin/date']="197001010101"
-  ) > mockReturns
-
   run /entrypoint.sh
 
+  tag="`date +%Y%m%d%H%M%S`12169e"
   expectStdOut "
-::set-output name=snapshot-tag::19700101010112169e
+::set-output name=snapshot-tag::$tag
 ::set-output name=tag::latest"
 
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
+/usr/local/bin/docker build -t my/repository:latest -t my/repository:$tag .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker push my/repository:$tag
 /usr/local/bin/docker logout"
 }
 
 @test "it caches image from former build and uses it for snapshot" {
   export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
   export INPUT_SNAPSHOT='true'
-  export INPUT_CACHE='true'
-
-  declare -A -p MOCK_RETURNS=(
-  ['/usr/local/bin/docker']=""
-  ['/usr/bin/date']="197001010101"
-  ) > mockReturns
+  export INPUT_CACHE='3'
 
   run /entrypoint.sh
 
+  tag="`date +%Y%m%d%H%M%S`12169e"
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker pull my/repository:latest
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
+/usr/local/bin/docker history -H=false my/repository:latest
+/usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:$tag .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker push my/repository:$tag
 /usr/local/bin/docker logout"
 }
 
 @test "it does not use the cache for building when pulling the former image failed" {
   export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
-  export MOCK_DATE='197001010101'
   export INPUT_SNAPSHOT='true'
-  export INPUT_CACHE='true'
+  export INPUT_CACHE='3'
 
   declare -A -p MOCK_RETURNS=(
-  ['/usr/local/bin/docker']="_pull my/repository:latest" # errors when pulled
-  ['/usr/bin/date']="197001010101"
+  ['/usr/local/bin/docker']=""
+  ['/usr/local/bin/docker pull']="_" # errors when pulled
   ) > mockReturns
 
   run /entrypoint.sh
 
+  tag="`date +%Y%m%d%H%M%S`12169e"
+  echo $output
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker pull my/repository:latest
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
+/usr/local/bin/docker build -t my/repository:latest -t my/repository:$tag .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker push my/repository:$tag
 /usr/local/bin/docker logout"
 }
 
@@ -180,40 +176,32 @@ teardown() {
   export INPUT_SNAPSHOT='true'
   export INPUT_DOCKERFILE='MyDockerFileName'
 
-  declare -A -p MOCK_RETURNS=(
-  ['/usr/local/bin/docker']=""
-  ['/usr/bin/date']="197001010101"
-  ) > mockReturns
-
   run /entrypoint.sh
 
+  tag="`date +%Y%m%d%H%M%S`12169e"
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
+/usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:$tag .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker push my/repository:$tag
 /usr/local/bin/docker logout"
 }
 
 @test "it caches image from former build and uses it for snapshot with specific Dockerfile" {
   export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
   export INPUT_SNAPSHOT='true'
-  export INPUT_CACHE='true'
+  export INPUT_CACHE='3'
   export INPUT_DOCKERFILE='MyDockerFileName'
-
-  declare -A -p MOCK_RETURNS=(
-  ['/usr/local/bin/docker']=""
-  ['/usr/bin/date']="197001010101"
-  ) > mockReturns
 
   run /entrypoint.sh
 
+  echo $output
+  tag="`date +%Y%m%d%H%M%S`12169e"
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker pull my/repository:latest
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
+/usr/local/bin/docker history -H=false my/repository:latest
+/usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:$tag .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker push my/repository:$tag
 /usr/local/bin/docker logout"
 }
 
@@ -253,15 +241,51 @@ teardown() {
 }
 
 @test "it caches the image from a former build" {
-  export INPUT_CACHE='true'
+  export INPUT_CACHE=3
 
   run /entrypoint.sh
 
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker pull my/repository:latest
+/usr/local/bin/docker history -H=false my/repository:latest
 /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
 /usr/local/bin/docker push my/repository:latest
 /usr/local/bin/docker logout"
+}
+
+@test "it does not cache the image when older than retention period" {
+  export INPUT_CACHE='1'
+
+  declare -A -p MOCK_RETURNS=(
+  ['/usr/local/bin/docker']=""
+  ['/usr/local/bin/docker history']="IMAGE               CREATED AT                  CREATED BY                                      SIZE                COMMENT
+cf0f3ca922e0        2019-10-18T20:48:51+02:00   /bin/sh -c #(nop)  CMD ['/bin/bash']            0
+<missing>           2019-10-18T20:48:51+02:00   /bin/sh -c mkdir -p /run/systemd && echo 'do…   7"
+  ) > mockReturns
+
+  run /entrypoint.sh
+
+  expectStdOut "
+Retention period has been exceeded. Building without cache.
+::set-output name=tag::latest"
+
+  echo $ouput
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker pull my/repository:latest
+/usr/local/bin/docker history -H=false my/repository:latest
+/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker logout"
+}
+
+@test "it warns when using the old caching syntax" {
+  export INPUT_CACHE='true'
+
+  run /entrypoint.sh
+
+  expectStdOut "
+Warning: Your build is using the deprecated INPUT_CACHE=true, please upgrade to a specific retention time as this feature will be removed in 3.x (see https://github.com/elgohr/Publish-Docker-Github-Action/tree/master#cache)
+::set-output name=tag::latest"
 }
 
 @test "it pushes pull requests when configured" {
