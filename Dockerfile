@@ -1,10 +1,6 @@
-FROM docker:19.03.2 as runtime
+FROM gcr.io/google.com/cloudsdktool/cloud-sdk:alpine as runtime
 LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
 LABEL "maintainer"="Lars Gohr"
-
-RUN apk update \
-  && apk upgrade \
-  && apk add --no-cache git
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

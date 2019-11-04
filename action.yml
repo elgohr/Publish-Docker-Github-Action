@@ -10,10 +10,10 @@ inputs:
     required: true
   username:
     description: 'The login username for the registry'
-    required: true
+    required: false
   password:
     description: 'The login password for the registry'
-    required: true
+    required: false
   registry:
     description: 'Use registry for pushing to a custom registry'
     required: false

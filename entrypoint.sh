@@ -5,8 +5,6 @@ function main() {
   echo "" # see https://github.com/actions/toolkit/issues/168
 
   sanitize "${INPUT_NAME}" "name"
-  sanitize "${INPUT_USERNAME}" "username"
-  sanitize "${INPUT_PASSWORD}" "password"
 
   REGISTRY_NO_PROTOCOL=$(echo "${INPUT_REGISTRY}" | sed -e 's/^https:\/\///g')
   if uses "${INPUT_REGISTRY}" && ! isPartOfTheName "${REGISTRY_NO_PROTOCOL}"; then
@@ -20,7 +18,11 @@ function main() {
     changeWorkingDirectory
   fi
 
-  echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  if uses "${INPUT_USERNAME}" || uses "${INPUT_PASSWORD}"; then
+    sanitize "${INPUT_USERNAME}" "username"
+    sanitize "${INPUT_PASSWORD}" "password"
+    echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  fi
 
   BUILDPARAMS=""
 
