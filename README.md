@@ -128,7 +128,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
 ---
-name: Publish Dependencies
+name: Publish Docker
 on: [push]
 jobs:
   build:
