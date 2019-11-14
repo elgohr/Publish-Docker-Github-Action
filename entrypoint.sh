@@ -30,11 +30,11 @@ function main() {
   if uses "${INPUT_BUILDARGS}"; then
     addBuildArgs
   fi
-  if uses "${INPUT_CACHE}"; then
+  if usesBoolean "${INPUT_CACHE}"; then
     useBuildCache
   fi
 
-  if uses "${INPUT_SNAPSHOT}"; then
+  if usesBoolean "${INPUT_SNAPSHOT}"; then
     pushWithSnapshot
   else
     pushWithoutSnapshot
@@ -62,7 +62,7 @@ function translateDockerTag() {
     INPUT_NAME=$(echo ${INPUT_NAME} | cut -d':' -f1)
   elif isOnMaster; then
     TAG="latest"
-  elif isGitTag && uses "${INPUT_TAG_NAMES}"; then
+  elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAG=$(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g")
   elif isGitTag; then
     TAG="latest"
@@ -112,6 +112,10 @@ function useBuildCache() {
 
 function uses() {
   [ ! -z "${1}" ]
+}
+
+function usesBoolean() {
+  [ ! -z "${1}" ] && [ "${1}" = "true" ]
 }
 
 function pushWithSnapshot() {

@@ -82,7 +82,7 @@ teardown() {
 
 @test "with tag names it pushes tags using the name" {
   export GITHUB_REF='refs/tags/myRelease'
-  export INPUT_TAG_NAMES=true
+  export INPUT_TAG_NAMES="true"
 
   run /entrypoint.sh
 
@@ -92,6 +92,21 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker build -t my/repository:myRelease .
 /usr/local/bin/docker push my/repository:myRelease
+/usr/local/bin/docker logout"
+}
+
+@test "with tag names set to false it doesn't push tags using the name" {
+  export GITHUB_REF='refs/tags/myRelease'
+  export INPUT_TAG_NAMES="false"
+
+  run /entrypoint.sh
+
+  expectStdOut "
+::set-output name=tag::latest"
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -129,6 +144,26 @@ teardown() {
 /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
 /usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker logout"
+}
+
+@test "it does not push a snapshot by sha and date in addition when turned off" {
+  export INPUT_SNAPSHOT='false'
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+
+  declare -A -p MOCK_RETURNS=(
+  ['/usr/local/bin/docker']=""
+  ['/usr/bin/date']="197001010101"
+  ) > mockReturns
+
+  run /entrypoint.sh
+
+  expectStdOut "
+::set-output name=tag::latest"
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -260,6 +295,17 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker pull my/repository:latest
 /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker logout"
+}
+
+@test "it does not cache the image from a former build if set to false" {
+  export INPUT_CACHE='false'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:latest .
 /usr/local/bin/docker push my/repository:latest
 /usr/local/bin/docker logout"
 }
