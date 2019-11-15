@@ -113,6 +113,9 @@ Use `cache` when you have big images, that you would only like to build partiall
 ```yaml
 name: Publish to Registry
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 2 * * 0' # Weekly on Sundays at 02:00
 jobs:
