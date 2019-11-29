@@ -23,12 +23,16 @@ function main() {
   echo ${INPUT_PASSWORD} | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
 
   BUILDPARAMS=""
+  CONTEXT="."
 
   if uses "${INPUT_DOCKERFILE}"; then
     useCustomDockerfile
   fi
   if uses "${INPUT_BUILDARGS}"; then
     addBuildArgs
+  fi
+  if uses "${INPUT_CONTEXT}"; then
+    CONTEXT="${INPUT_CONTEXT}"
   fi
   if usesBoolean "${INPUT_CACHE}"; then
     useBuildCache
@@ -123,14 +127,14 @@ function pushWithSnapshot() {
   local SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-6)
   local SNAPSHOT_TAG="${TIMESTAMP}${SHORT_SHA}"
   local SHA_DOCKER_NAME="${INPUT_NAME}:${SNAPSHOT_TAG}"
-  docker build $BUILDPARAMS -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} .
+  docker build $BUILDPARAMS -t ${DOCKERNAME} -t ${SHA_DOCKER_NAME} ${CONTEXT}
   docker push ${DOCKERNAME}
   docker push ${SHA_DOCKER_NAME}
   echo ::set-output name=snapshot-tag::"${SNAPSHOT_TAG}"
 }
 
 function pushWithoutSnapshot() {
-  docker build $BUILDPARAMS -t ${DOCKERNAME} .
+  docker build $BUILDPARAMS -t ${DOCKERNAME} ${CONTEXT}
   docker push ${DOCKERNAME}
 }
 

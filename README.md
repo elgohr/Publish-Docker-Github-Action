@@ -89,6 +89,17 @@ with:
   workdir: mySubDirectory
 ```
 
+### context
+Use `context` when you would like to change the Docker build context.
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  context: myContextDirectory
+```
+
 ### buildargs
 Use `buildargs` when you want to pass a list of environment variables as [build-args](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg). Identifiers are separated by comma.   
 All `buildargs` will be masked, so that they don't appear in the logs.  

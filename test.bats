@@ -412,6 +412,39 @@ teardown() {
   [ "$status" -eq 2 ]
 }
 
+@test "it can set a custom context" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_CONTEXT='/myContextFolder'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:latest /myContextFolder
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker logout"
+}
+
+@test "it can set a custom context when building snapshot" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_CONTEXT='/myContextFolder'
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+  export INPUT_SNAPSHOT='true'
+
+  declare -A -p MOCK_RETURNS=(
+  ['/usr/local/bin/docker']=""
+  ['/usr/bin/date']="197001010101"
+  ) > mockReturns
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/bin/date +%Y%m%d%H%M%S
+/usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e /myContextFolder
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker push my/repository:19700101010112169e
+/usr/local/bin/docker logout"
+}
+
 function expectStdOut() {
   echo "Expected: |$1|
   Got: |$output|"
