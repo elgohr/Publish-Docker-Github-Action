@@ -31,7 +31,12 @@ jobs:
 `username` the login username for the registry  
 `password` the login password for the registry  
 
-> If you would like to publish the image to AWS ECR, please have a look at https://github.com/elgohr/ecr-login-action
+If you would like to publish the image to other registries, these actions might be helpful  
+
+| Registry                                             | Action                                        |
+|------------------------------------------------------|-----------------------------------------------|
+| Amazon Webservices Elastic Container Registry (ECR)  | https://github.com/elgohr/ecr-login-action    |
+| Google Cloud Container Registry                      | https://github.com/elgohr/gcloud-login-action |
 
 ## Outputs
 
