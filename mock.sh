@@ -8,9 +8,13 @@ function mockShouldFail() {
 }
 
 source mockReturns
-if [ ! -z "${MOCK_RETURNS[${binary}]}" ]; then
+if [ ! -z "${MOCK_RETURNS[${binary}]}" ] || [ ! -z "${MOCK_RETURNS[${binary} $1]}" ]; then
   if mockShouldFail ; then
     exit 1
+  fi
+  if [ ! -z "${MOCK_RETURNS[${binary} $1]}" ]; then
+    echo ${MOCK_RETURNS[${binary} $1]}
+    exit 0
   fi
   echo ${MOCK_RETURNS[${binary}]}
 fi

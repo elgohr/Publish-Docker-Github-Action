@@ -29,12 +29,12 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::latest"
+  expectStdOutContains "::set-output name=tag::latest"
 
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker build -t my/repository:latest .
 /usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -43,13 +43,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::myBranch"
+  expectStdOutContains "::set-output name=tag::myBranch"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:myBranch .
-/usr/local/bin/docker push my/repository:myBranch
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:myBranch .
+/usr/local/bin/docker push my/repository:myBranch"
 }
 
 @test "it converts dashes in branch to hyphens" {
@@ -57,13 +54,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::myBranch-withDash"
+  expectStdOutContains "::set-output name=tag::myBranch-withDash"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:myBranch-withDash .
-/usr/local/bin/docker push my/repository:myBranch-withDash
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:myBranch-withDash .
+/usr/local/bin/docker push my/repository:myBranch-withDash"
 }
 
 @test "it pushes tags to latest" {
@@ -71,12 +65,12 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::latest"
+  expectStdOutContains "::set-output name=tag::latest"
 
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
 /usr/local/bin/docker build -t my/repository:latest .
 /usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -86,13 +80,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::myRelease"
+  expectStdOutContains "::set-output name=tag::myRelease"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:myRelease .
-/usr/local/bin/docker push my/repository:myRelease
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:myRelease .
+/usr/local/bin/docker push my/repository:myRelease"
 }
 
 @test "with tag names set to false it doesn't push tags using the name" {
@@ -101,13 +92,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
-::set-output name=tag::latest"
+  expectStdOutContains "::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
 }
 
 @test "it pushes specific Dockerfile to latest" {
@@ -115,13 +103,10 @@ teardown() {
 
   run /entrypoint.sh  export GITHUB_REF='refs/heads/master'
 
-  expectStdOut "
-::set-output name=tag::latest"
+  expectStdOutContains "::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
 }
 
 @test "it pushes a snapshot by sha and date in addition" {
@@ -135,16 +120,14 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::set-output name=snapshot-tag::19700101010112169e
 ::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/bin/date +%Y%m%d%H%M%S
+  expectMockCalled "/usr/bin/date +%Y%m%d%H%M%S
 /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:19700101010112169e"
 }
 
 @test "it does not push a snapshot by sha and date in addition when turned off" {
@@ -158,13 +141,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
 }
 
 @test "it caches image from former build and uses it for snapshot" {
@@ -184,8 +165,7 @@ teardown() {
 /usr/bin/date +%Y%m%d%H%M%S
 /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:19700101010112169e"
 }
 
 @test "it does not use the cache for building when pulling the former image failed" {
@@ -201,13 +181,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker pull my/repository:latest
+  expectMockCalled "/usr/local/bin/docker pull my/repository:latest
 /usr/bin/date +%Y%m%d%H%M%S
 /usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:19700101010112169e"
 }
 
 @test "it pushes branch by sha and date with specific Dockerfile" {
@@ -222,12 +200,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+  expectMockCalled "
 /usr/bin/date +%Y%m%d%H%M%S
 /usr/local/bin/docker build -f MyDockerFileName -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:19700101010112169e"
 }
 
 @test "it caches image from former build and uses it for snapshot with specific Dockerfile" {
@@ -243,13 +220,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker pull my/repository:latest
+  expectMockCalled "/usr/local/bin/docker pull my/repository:latest
 /usr/bin/date +%Y%m%d%H%M%S
 /usr/local/bin/docker build -f MyDockerFileName --cache-from my/repository:latest -t my/repository:latest -t my/repository:19700101010112169e .
 /usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:19700101010112169e"
 }
 
 @test "it pushes to another registry and adds the hostname" {
@@ -260,6 +235,7 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
 /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
 /usr/local/bin/docker push my.Registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -272,6 +248,7 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
 /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
 /usr/local/bin/docker push my.Registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -284,6 +261,7 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin https://my.Registry.io
 /usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
 /usr/local/bin/docker push my.Registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -292,11 +270,9 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker pull my/repository:latest
+  expectMockCalled "/usr/local/bin/docker pull my/repository:latest
 /usr/local/bin/docker build --cache-from my/repository:latest -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+/usr/local/bin/docker push my/repository:latest"
 }
 
 @test "it does not cache the image from a former build if set to false" {
@@ -304,10 +280,8 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
 }
 
 @test "it pushes pull requests when configured" {
@@ -317,13 +291,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::set-output name=tag::12169ed809255604e557a82617264e9c373faca7"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:12169ed809255604e557a82617264e9c373faca7 .
-/usr/local/bin/docker push my/repository:12169ed809255604e557a82617264e9c373faca7
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:12169ed809255604e557a82617264e9c373faca7 .
+/usr/local/bin/docker push my/repository:12169ed809255604e557a82617264e9c373faca7"
 }
 
 @test "it pushes to the tag if configured in the name" {
@@ -331,13 +303,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::set-output name=tag::custom-tag"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:custom-tag .
-/usr/local/bin/docker push my/repository:custom-tag
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:custom-tag .
+/usr/local/bin/docker push my/repository:custom-tag"
 }
 
 @test "it uses buildargs for building, if configured" {
@@ -345,15 +315,12 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::add-mask::MY_FIRST
 ::add-mask::MY_SECOND
 ::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build --build-arg MY_FIRST --build-arg MY_SECOND -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build --build-arg MY_FIRST --build-arg MY_SECOND -t my/repository:latest ."
 }
 
 @test "it uses buildargs for a single variable" {
@@ -361,14 +328,11 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOut "
+  expectStdOutContains "
 ::add-mask::MY_ONLY
 ::set-output name=tag::latest"
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build --build-arg MY_ONLY -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build --build-arg MY_ONLY -t my/repository:latest ."
 }
 
 @test "it errors when with.name was not set" {
@@ -418,10 +382,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:latest /myContextFolder
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest /myContextFolder"
 }
 
 @test "it can set a custom context when building snapshot" {
@@ -437,23 +398,37 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/bin/date +%Y%m%d%H%M%S
-/usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e /myContextFolder
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker push my/repository:19700101010112169e
-/usr/local/bin/docker logout"
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest -t my/repository:19700101010112169e /myContextFolder"
 }
 
-function expectStdOut() {
-  echo "Expected: |$1|
-  Got: |$output|"
-  [ "$output" = "$1" ]
+@test "it populates the digest" {
+  export GITHUB_REF='refs/heads/master'
+
+  declare -A -p MOCK_RETURNS=(
+  ['/usr/local/bin/docker inspect']="my/repository@sha256:53b76152042486bc741fe59f130bfe683b883060c8284271a2586342f35dcd0e"
+  ['/usr/bin/date']="197001010101"
+  ) > mockReturns
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=digest::my/repository@sha256:53b76152042486bc741fe59f130bfe683b883060c8284271a2586342f35dcd0e"
+
+  expectMockCalled "/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest"
+}
+
+function expectStdOutContains() {
+  local expected=$(echo "${1}" | tr -d '\n')
+  local got=$(echo "${output}" | tr -d '\n')
+  echo "Expected: |${expected}|
+  Got: |${got}|"
+  echo "${got}" | grep "${expected}"
 }
 
 function expectMockCalled() {
-  local mockCalledWith=$(cat mockCalledWith)
-  echo "Expected: |$1|
-  Got: |$mockCalledWith|"
-  [ "$mockCalledWith" = "$1" ]
+  local expected=$(echo "${1}" | tr -d '\n')
+  local got=$(cat mockCalledWith | tr -d '\n')
+  echo "Expected: |${expected}|
+  Got: |${got}|"
+  echo "${got}" | grep "${expected}"
 }

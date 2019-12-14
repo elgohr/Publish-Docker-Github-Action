@@ -43,7 +43,9 @@ function main() {
   else
     pushWithoutSnapshot
   fi
-  echo ::set-output name=tag::"${TAG}"
+  echo "::set-output name=tag::${TAG}"
+  DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${DOCKERNAME})
+  echo "::set-output name=digest::${DIGEST}"
 
   docker logout
 }
