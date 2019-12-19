@@ -417,6 +417,30 @@ teardown() {
 /usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest"
 }
 
+@test "it uses buildoptions for building, if configured" {
+  export INPUT_BUILDOPTIONS='--compress --force-rm'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker build --compress --force-rm -t my/repository:latest ."
+}
+
+@test "it uses buildoptions for building with snapshot, if configured" {
+  export INPUT_BUILDOPTIONS='--compress --force-rm'
+  export INPUT_SNAPSHOT='true'
+
+  export GITHUB_SHA='12169ed809255604e557a82617264e9c373faca7'
+
+  declare -A -p MOCK_RETURNS=(
+  ['/usr/local/bin/docker']=""
+  ['/usr/bin/date']="197001010101"
+  ) > mockReturns
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker build --compress --force-rm -t my/repository:latest -t my/repository:19700101010112169e ."
+}
+
 function expectStdOutContains() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
