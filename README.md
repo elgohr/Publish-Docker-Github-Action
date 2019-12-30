@@ -29,7 +29,7 @@ jobs:
 
 `name` is the name of the image you would like to push  
 `username` the login username for the registry  
-`password` the login password for the registry  
+`password` the authentication token [preferred] or login password for the registry.
 
 If you would like to publish the image to other registries, these actions might be helpful  
 
