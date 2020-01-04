@@ -10,5 +10,5 @@ jobs:
       with:
         name: docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action
         username: ${{ secrets.DOCKER_GITHUB_USERNAME }}
-        password: ${{ secrets.DOCKER_GITHUB_PASSWORD }}
+        password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
