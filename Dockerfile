@@ -10,7 +10,7 @@ ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 FROM runtime as testEnv
-RUN apk add --no-cache coreutils bats ncurses
+RUN apk add --no-cache coreutils bats
 ADD test.bats /test.bats
 ADD mock.sh /usr/local/bin/docker
 ADD mock.sh /usr/bin/date

@@ -130,14 +130,24 @@ Use `buildoptions` when you want to configure [options](https://docs.docker.com/
 ```yaml
 - name: Publish to Registry
   uses: elgohr/Publish-Docker-Github-Action@master
-  env:
-    MY_FIRST: variableContent
-    MY_SECOND: variableContent
   with:
     name: myDocker/repository
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
     buildoptions: "--compress --force-rm"
+```
+
+### tags
+Use `tags` when you want to bring your own tags (separated by comma).  
+
+```yaml
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@master
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    tags: "latest,another"
 ```
 
 ### cache
@@ -167,6 +177,8 @@ jobs:
 ```
 
 ### tag_names
+> DEPRECATED: Please use tags instead. This option will be removed in a future release.
+
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
 

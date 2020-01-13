@@ -441,6 +441,47 @@ teardown() {
   expectMockCalled "/usr/local/bin/docker build --compress --force-rm -t my/repository:latest -t my/repository:19700101010112169e ."
 }
 
+@test "it provides a possibility to define multiple tags" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_TAGS='A,B,C'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:A -t my/repository:B -t my/repository:C .
+/usr/local/bin/docker push my/repository:A
+/usr/local/bin/docker push my/repository:B
+/usr/local/bin/docker push my/repository:C
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:A
+/usr/local/bin/docker logout"
+}
+
+@test "it provides a possibility to define one tag" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_TAGS='A'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:A .
+/usr/local/bin/docker push my/repository:A
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:A
+/usr/local/bin/docker logout"
+}
+
+@test "it caches the first image when multiple tags defined" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_TAGS='A,B'
+  export INPUT_CACHE='true'
+
+  run /entrypoint.sh
+
+  expectMockCalled "/usr/local/bin/docker pull my/repository:A
+/usr/local/bin/docker build --cache-from my/repository:A -t my/repository:A -t my/repository:B .
+/usr/local/bin/docker push my/repository:A
+/usr/local/bin/docker push my/repository:B"
+}
+
 function expectStdOutContains() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
