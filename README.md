@@ -176,6 +176,27 @@ jobs:
         cache: ${{ github.event_name != 'schedule' }}
 ```
 
+### nopush
+Use `nopush` when you only want to build the docker image without publishing it.
+This can be useful for example on pull request, where you only want to publish
+on the `master` branch for example but still want to build on Pull Requests.
+
+```yaml
+name: Publish to Registry
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: myDocker/repository
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        nopush: ${{ github.ref != 'master' }}
+```
+
 ### tag_names
 > DEPRECATED: Please use tags instead. This option will be removed in a future release.
 

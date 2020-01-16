@@ -145,6 +145,11 @@ function push() {
   done
   docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
 
+  if usesBoolean "${INPUT_NOPUSH}"; then
+    echo "push disable by 'nopush' value";
+    return
+  fi
+
   for TAG in ${TAGS}
   do
     docker push "${INPUT_NAME}:${TAG}"

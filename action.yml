@@ -35,6 +35,9 @@ inputs:
   tag_names:
     description: 'Use tag_names when you want to push tags/release by their git name'
     required: false
+  nopush:
+    description: 'Disable the push action, so pull requests can only build for example. Default: false'
+    require: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'
