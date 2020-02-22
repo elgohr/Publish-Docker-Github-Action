@@ -190,7 +190,7 @@ with:
 
 ### tag_semver
 Use `tag_semver` when you want to push tags using the semver syntax by their git name (e.g. `refs/tags/v1.2.3`). This will push four
-docker tags: `1.2.3`, `1.2`, `1` and `latest`. A prefix 'v' will automatically be removed.
+docker tags: `1.2.3`, `1.2` and `1`. A prefix 'v' will automatically be removed.
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
 
 ```yaml
