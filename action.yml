@@ -35,6 +35,9 @@ inputs:
   tag_names:
     description: 'Use tag_names when you want to push tags/release by their git name'
     required: false
+  tag_semver:
+    description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'

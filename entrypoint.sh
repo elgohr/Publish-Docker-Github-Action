@@ -73,6 +73,8 @@ function translateDockerTag() {
     INPUT_NAME=$(echo ${INPUT_NAME} | cut -d':' -f1)
   elif isOnMaster; then
     TAGS="latest"
+  elif isGitTag && usesBoolean "${INPUT_TAG_SEMVER}" && isSemver "${GITHUB_REF}"; then
+    TAGS=$(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9+])\.([0-9]+)/\1.\2.\3 \1.\2 \1/g")
   elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAGS=$(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g")
   elif isGitTag; then
@@ -127,6 +129,10 @@ function uses() {
 
 function usesBoolean() {
   [ ! -z "${1}" ] && [ "${1}" = "true" ]
+}
+
+function isSemver() {
+  echo "${1}" | grep -Eq '^refs/tags/v?([0-9]+)\.([0-9+])\.([0-9]+)$'
 }
 
 function useSnapshot() {

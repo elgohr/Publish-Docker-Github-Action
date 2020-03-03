@@ -98,6 +98,64 @@ teardown() {
 /usr/local/bin/docker push my/repository:latest"
 }
 
+@test "with tag semver it pushes tags using the major and minor versions" {
+  export GITHUB_REF='refs/tags/v1.2.34'
+  export INPUT_TAG_SEMVER="true"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::1.2.34"
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:1.2.34 -t my/repository:1.2 -t my/repository:1 .
+/usr/local/bin/docker push my/repository:1.2.34
+/usr/local/bin/docker push my/repository:1.2
+/usr/local/bin/docker push my/repository:1
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.2.34
+/usr/local/bin/docker logout"
+}
+
+@test "with tag semver it pushes tags without 'v' prefix" {
+  export GITHUB_REF='refs/tags/1.2.34'
+  export INPUT_TAG_SEMVER="true"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::1.2.34"
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:1.2.34 -t my/repository:1.2 -t my/repository:1 .
+/usr/local/bin/docker push my/repository:1.2.34
+/usr/local/bin/docker push my/repository:1.2
+/usr/local/bin/docker push my/repository:1
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.2.34
+/usr/local/bin/docker logout"
+}
+
+@test "with tag semver it pushes latest when tag has invalid semver version" {
+  export GITHUB_REF='refs/tags/vAA.BB.CC'
+  export INPUT_TAG_SEMVER="true"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::latest"
+
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
+}
+
+@test "with tag semver set to false it doesn't push tags using semver" {
+  export GITHUB_REF='refs/tags/v1.2.34'
+  export INPUT_TAG_NAMES="false"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::latest"
+
+  expectMockCalled "/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest"
+}
+
 @test "it pushes specific Dockerfile to latest" {
   export INPUT_DOCKERFILE='MyDockerFileName'
 
