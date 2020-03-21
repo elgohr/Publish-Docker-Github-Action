@@ -137,19 +137,6 @@ Use `buildoptions` when you want to configure [options](https://docs.docker.com/
     buildoptions: "--compress --force-rm"
 ```
 
-### tags
-Use `tags` when you want to bring your own tags (separated by comma).  
-
-```yaml
-- name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@master
-  with:
-    name: myDocker/repository
-    username: ${{ secrets.DOCKER_USERNAME }}
-    password: ${{ secrets.DOCKER_PASSWORD }}
-    tags: "latest,another"
-```
-
 ### cache
 Use `cache` when you have big images, that you would only like to build partially (changed layers).  
 > CAUTION: Docker builds will cache non-repoducable commands, such as installing packages. If you use this option, your packages will never update. To avoid this, run this action on a schedule with caching **disabled** to rebuild the cache periodically.
@@ -175,8 +162,26 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         cache: ${{ github.event_name != 'schedule' }}
 ```
+### Tags
 
-### tag_names
+This action supports multiple options that tags are handled.  
+By default a tag is pushed as `latest`.  
+Furthermore, one of the following options can be used. 
+
+#### tags
+Use `tags` when you want to bring your own tags (separated by comma).  
+
+```yaml
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@master
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    tags: "latest,another"
+```
+
+#### tag_names
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
 
@@ -188,7 +193,7 @@ with:
   tag_names: true
 ```
 
-### tag_semver
+#### tag_semver
 Use `tag_semver` when you want to push tags using the semver syntax by their git name (e.g. `refs/tags/v1.2.3`). This will push four
 docker tags: `1.2.3`, `1.2` and `1`. A prefix 'v' will automatically be removed.
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
