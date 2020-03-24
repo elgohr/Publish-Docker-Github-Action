@@ -115,6 +115,29 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
+@test "with tag semver it pushes tags using the pre-releases" {
+  # https://semver.org/#spec-item-11
+
+  SUFFIXES=('alpha.1' 'alpha' 'ALPHA' 'ALPHA.11' 'beta' 'rc.11')
+  for SUFFIX in "${SUFFIXES[@]}"
+  do
+    export GITHUB_REF="refs/tags/v1.1.1-${SUFFIX}"
+    export INPUT_TAG_SEMVER="true"
+
+    run /entrypoint.sh
+
+    expectStdOutContains "::set-output name=tag::1.1.1-${SUFFIX}"
+
+    expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} -t my/repository:1.1-${SUFFIX} -t my/repository:1-${SUFFIX} .
+/usr/local/bin/docker push my/repository:1.1.1-${SUFFIX}
+/usr/local/bin/docker push my/repository:1.1-${SUFFIX}
+/usr/local/bin/docker push my/repository:1-${SUFFIX}
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.1.1-${SUFFIX}
+/usr/local/bin/docker logout"
+  done
+}
+
 @test "with tag semver it pushes tags without 'v' prefix" {
   export GITHUB_REF='refs/tags/1.2.34'
   export INPUT_TAG_SEMVER="true"
