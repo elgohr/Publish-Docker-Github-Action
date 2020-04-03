@@ -180,7 +180,7 @@ Use `tags` when you want to bring your own tags (separated by comma).
     password: ${{ secrets.DOCKER_PASSWORD }}
     tags: "latest,another"
 ```
-When using dynamic tag names the enviornment variable must be set via an echo, variables set via the env: convention will not auto resolve
+When using dynamic tag names the enviornment variable must be set via an echo, variables set via the env: convention will not auto resolve. This example illustrates how you would push to latest along with creating a version tag when you create a release. 
 ```yaml
 - name: Get release version
   id: get_version
