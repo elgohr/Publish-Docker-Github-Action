@@ -180,6 +180,19 @@ Use `tags` when you want to bring your own tags (separated by comma).
     password: ${{ secrets.DOCKER_PASSWORD }}
     tags: "latest,another"
 ```
+When using dynamic tag names the enviornment variable must be set via an echo, variables set via the env: convention will not auto resolve
+```yaml
+- name: Get release version
+  id: get_version
+  run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@master
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    tags: "latest,${{ env.RELEASE_VERSION }}"
+```
 
 #### tag_names
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
