@@ -181,6 +181,36 @@ Use `tags` when you want to bring your own tags (separated by comma).
     tags: "latest,another"
 ```
 
+When using dynamic tag names the environment variable must be set via echo, as variables set in the environment will not auto resolve by convention.  
+This example illustrates how you would push to latest along with creating a custom version tag in a release. Setting it to only run on published events will keep your tags from being filled with commit hashes and will only publish when a GitHub release is created, so if the GitHub release is 2.14 this will publish to the latest and 2.14 tags.
+
+```yaml
+name: Publish to Registry
+on:    
+  release:
+      types: [published]
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 2 * * 0' # Weekly on Sundays at 02:00
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Get release version
+      id: get_version
+      run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: myDocker/repository
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: "latest,${{ env.RELEASE_VERSION }}"
+```
+
 #### tag_names
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
