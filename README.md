@@ -182,7 +182,8 @@ Use `tags` when you want to bring your own tags (separated by comma).
 ```
 
 When using dynamic tag names the environment variable must be set via echo, as variables set in the environment will not auto resolve by convention.  
-This example illustrates how you would push to latest along with creating a custom version tag in a release. Setting it to only run on published events will keep your tags from being filled with commit hashes and will only publish when a github release is created, so if the gihub release is 2.14 this will publish to the lastest and 2.14 tags.
+This example illustrates how you would push to latest along with creating a custom version tag in a release. Setting it to only run on published events will keep your tags from being filled with commit hashes and will only publish when a GitHub release is created, so if the GitHub release is 2.14 this will publish to the latest and 2.14 tags.
+
 ```yaml
 name: Publish to Registry
 on:    
