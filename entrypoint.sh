@@ -14,7 +14,7 @@ function main() {
   fi
 
   if uses "${INPUT_TAGS}"; then
-    TAGS=$(echo "${INPUT_TAGS}" | sed "s/,/ /g")
+    TAGS=$(echo "${INPUT_TAG_PREFIX}${INPUT_TAGS}" | sed "s/,/ /g")
   else 
     translateDockerTag
   fi
