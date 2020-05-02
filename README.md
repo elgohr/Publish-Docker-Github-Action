@@ -211,6 +211,46 @@ jobs:
         tags: "latest,${{ env.RELEASE_VERSION }}"
 ```
 
+#### tag_prefix
+Use `tag_prefix` when you want add something before the tag you will push.  
+
+```yaml
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@master
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    tag_semver: true
+    tag_prefix: "arm64-"
+```
+
+This allow you to set dynamic image name with strategy matrix for example. In this illustrated example, the image tag created will be ARM-1.0.0 and ARM64-1.0.0. the two images will be pushed in you're repository.
+
+```yaml
+name: Publish to Registry
+
+jobs:
+  update:
+    runs-on: 
+      - self-hosted
+      - ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ARM, ARM64]
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: myDocker/repository
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tag_semver: true
+        tag_prefix: ${{ matrix.os }}-
+```
+
 #### tag_names
 Use `tag_names` when you want to push tags/release by their git name (e.g. `refs/tags/MY_TAG_NAME`).  
 > CAUTION: Images produced by this feature can be override by branches with the same name - without a way to restore.
