@@ -1,7 +1,8 @@
 name: Release to Docker Hub
-release:
-  types:
-    - created
+on:
+  release:
+    types:
+      - created
 jobs:
   build:
     runs-on: ubuntu-latest
