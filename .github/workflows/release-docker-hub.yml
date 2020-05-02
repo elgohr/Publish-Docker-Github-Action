@@ -13,4 +13,4 @@ jobs:
         name: lgohr/publish-docker-github-action
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: ${{ env.GITHUB_REF }}
+        tag_names: true
