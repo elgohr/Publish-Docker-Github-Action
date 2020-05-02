@@ -38,6 +38,9 @@ inputs:
   tag_semver:
     description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
     required: false
+  tags:
+    description: 'Use tags when you want to bring your own tags (separated by comma).'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'
