@@ -7,7 +7,6 @@ function main() {
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
-  sanitize "${INPUT_PASSWORD}" "template"
   
   REGISTRY_NO_PROTOCOL=$(echo "${INPUT_REGISTRY}" | sed -e 's/^https:\/\///g')
   if uses "${INPUT_REGISTRY}" && ! isPartOfTheName "${REGISTRY_NO_PROTOCOL}"; then
@@ -157,6 +156,7 @@ function push() {
   for TAG in ${TAGS}
   do
     IMAGE_TAG=$(parseTemplate ${INPUT_TEMPLATE})
+    echo ${IMAGE_TAG}
     BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${TAG} "
   done
   docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
