@@ -7,7 +7,8 @@ function main() {
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
-
+  sanitize "${INPUT_PASSWORD}" "template"
+  
   REGISTRY_NO_PROTOCOL=$(echo "${INPUT_REGISTRY}" | sed -e 's/^https:\/\///g')
   if uses "${INPUT_REGISTRY}" && ! isPartOfTheName "${REGISTRY_NO_PROTOCOL}"; then
     INPUT_NAME="${REGISTRY_NO_PROTOCOL}/${INPUT_NAME}"
@@ -143,11 +144,20 @@ function useSnapshot() {
   echo ::set-output name=snapshot-tag::"${SNAPSHOT_TAG}"
 }
 
+function parseTemplate() {
+  local template=$(echo "$@" | \
+                   sed -e 's/\"/\\"/g' \
+                       -e "s/'/\\'/g")
+  local values="name=${INPUT_NAME};tag=${TAG}"
+  echo "$(sh -c "${values};echo \"$template\"")"
+}
+
 function push() {
   local BUILD_TAGS=""
   for TAG in ${TAGS}
   do
-    BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${INPUT_TAG_PREFIX}${TAG} "
+    IMAGE_TAG=$(parseTemplate ${INPUT_TEMPLATE})
+    BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${TAG} "
   done
   docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
 
