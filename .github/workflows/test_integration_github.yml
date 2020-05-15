@@ -6,9 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: ./
       with:
-        name: docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action
+        name: ${{ github.repository }}/publish-docker-github-action
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
