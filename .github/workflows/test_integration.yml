@@ -8,7 +8,7 @@ jobs:
     - name: Publish to Registry
       uses: ./
       with:
-        name: ${{ github.repository }}/publish
+        name: ${{ github.repository }}/publish-docker-github-action
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
