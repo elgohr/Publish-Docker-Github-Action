@@ -38,8 +38,8 @@ inputs:
   tag_semver:
     description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
     required: false
-  tag_prefix:
-    description: 'Use tag_prefix when you want something before the tags.'
+  template:
+    description: 'Use template to modify the final output tag.'
     required: false
   tags:
     description: 'Use tags when you want to bring your own tags (separated by comma).'
