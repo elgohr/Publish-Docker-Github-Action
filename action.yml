@@ -33,10 +33,10 @@ inputs:
     description: 'Use cache when you have big images, that you would only like to build partially'
     required: false
   tags:
-    description: 'Use tag_names when you want to push tags/release by their git name'
+    description: 'Use tags when you want to bring your own tags (separated by comma)'
     required: false
   tag_names:
-    description: 'Use tags when you want to bring your own tags (separated by comma)'
+    description: 'Use tag_names when you want to push tags/release by their git name'
     required: false
   tag_semver:
     description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
