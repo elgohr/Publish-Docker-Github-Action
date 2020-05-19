@@ -4,6 +4,10 @@ set -e
 function main() {
   echo "" # see https://github.com/actions/toolkit/issues/168
 
+  if usesBoolean "${ACTIONS_STEP_DEBUG}"; then
+    set -x
+  fi
+
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"

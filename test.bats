@@ -563,6 +563,15 @@ teardown() {
 /usr/local/bin/docker push my/repository:B"
 }
 
+@test "it is verbose on ACTIONS_STEP_DEBUG" {
+  export GITHUB_REF='refs/heads/master'
+  export ACTIONS_STEP_DEBUG=true
+
+  run /entrypoint.sh
+
+  expectStdOutContains "sanitize my/repository name" # prints the commands
+}
+
 function expectStdOutContains() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
