@@ -569,7 +569,9 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "sanitize my/repository name" # prints the commands
+  expectStdOutContains "::add-mask::USERNAME
+::add-mask::PASSWORD
++ sanitize my/repository name"
 }
 
 function expectStdOutContains() {
