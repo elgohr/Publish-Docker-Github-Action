@@ -64,7 +64,7 @@ main() {
 }
 
 nameToLower(){
-  INPUT_NAME=$(echo INPUT_NAME | tr '[A-Z]' '[a-z]')
+  INPUT_NAME=$(echo ${INPUT_NAME} | tr '[A-Z]' '[a-z]')
 }
 
 sanitize() {
