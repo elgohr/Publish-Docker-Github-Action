@@ -10,6 +10,8 @@ main() {
     set -x
   fi
   
+  nameToLower
+  
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
