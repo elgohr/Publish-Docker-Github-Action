@@ -9,7 +9,7 @@ main() {
     echo "::add-mask::${INPUT_PASSWORD}"
     set -x
   fi
-
+  
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
@@ -59,6 +59,10 @@ main() {
   echo "::set-output name=digest::${DIGEST}"
 
   docker logout
+}
+
+nameToLower(){
+  INPUT_NAME=$(echo INPUT_NAME | tr '[A-Z]' '[a-z]')
 }
 
 sanitize() {
