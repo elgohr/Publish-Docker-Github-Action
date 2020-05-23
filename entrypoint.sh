@@ -10,6 +10,7 @@ main() {
     set -x
   fi
   
+  registryToLower
   nameToLower
   
   sanitize "${INPUT_NAME}" "name"
@@ -61,6 +62,10 @@ main() {
   echo "::set-output name=digest::${DIGEST}"
 
   docker logout
+}
+
+registryToLower(){
+ INPUT_REGISTRY=$(echo ${INPUT_REGISTRY} | tr '[A-Z]' '[a-z]')
 }
 
 nameToLower(){
