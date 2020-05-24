@@ -571,7 +571,7 @@ teardown() {
 
   expectStdOutContains "::add-mask::USERNAME
 ::add-mask::PASSWORD
-+ registryToLower"
++ sanitize my/repository name"
 }
 
 function expectStdOutContains() {

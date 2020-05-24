@@ -10,12 +10,12 @@ main() {
     set -x
   fi
   
-  registryToLower
-  nameToLower
-  
   sanitize "${INPUT_NAME}" "name"
   sanitize "${INPUT_USERNAME}" "username"
   sanitize "${INPUT_PASSWORD}" "password"
+
+  registryToLower
+  nameToLower
 
   REGISTRY_NO_PROTOCOL=$(echo "${INPUT_REGISTRY}" | sed -e 's/^https:\/\///g')
   if uses "${INPUT_REGISTRY}" && ! isPartOfTheName "${REGISTRY_NO_PROTOCOL}"; then
@@ -64,19 +64,19 @@ main() {
   docker logout
 }
 
-registryToLower(){
- INPUT_REGISTRY=$(echo ${INPUT_REGISTRY} | tr '[A-Z]' '[a-z]')
-}
-
-nameToLower(){
-  INPUT_NAME=$(echo ${INPUT_NAME} | tr '[A-Z]' '[a-z]')
-}
-
 sanitize() {
   if [ -z "${1}" ]; then
     >&2 echo "Unable to find the ${2}. Did you set with.${2}?"
     exit 1
   fi
+}
+
+registryToLower(){
+ INPUT_REGISTRY=$(echo "${INPUT_REGISTRY}" | tr '[A-Z]' '[a-z]')
+}
+
+nameToLower(){
+  INPUT_NAME=$(echo "${INPUT_NAME}" | tr '[A-Z]' '[a-z]')
 }
 
 isPartOfTheName() {
