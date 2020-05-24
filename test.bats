@@ -574,7 +574,7 @@ teardown() {
 + sanitize my/repository name"
 }
 
-function expectStdOutContains() {
+expectStdOutContains() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
   echo "Expected: |${expected}|
@@ -582,7 +582,7 @@ function expectStdOutContains() {
   echo "${got}" | grep "${expected}"
 }
 
-function expectMockCalled() {
+expectMockCalled() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(cat mockCalledWith | tr -d '\n')
   echo "Expected: |${expected}|
