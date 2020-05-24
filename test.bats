@@ -313,10 +313,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
-/usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
-/usr/local/bin/docker push my.Registry.io/my/repository:latest
-/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.registry.io
+/usr/local/bin/docker build -t my.registry.io/my/repository:latest .
+/usr/local/bin/docker push my.registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -326,10 +326,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.Registry.io
-/usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
-/usr/local/bin/docker push my.Registry.io/my/repository:latest
-/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin my.registry.io
+/usr/local/bin/docker build -t my.registry.io/my/repository:latest .
+/usr/local/bin/docker push my.registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
@@ -339,10 +339,10 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin https://my.Registry.io
-/usr/local/bin/docker build -t my.Registry.io/my/repository:latest .
-/usr/local/bin/docker push my.Registry.io/my/repository:latest
-/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.Registry.io/my/repository:latest
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin https://my.registry.io
+/usr/local/bin/docker build -t my.registry.io/my/repository:latest .
+/usr/local/bin/docker push my.registry.io/my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my.registry.io/my/repository:latest
 /usr/local/bin/docker logout"
 }
 
