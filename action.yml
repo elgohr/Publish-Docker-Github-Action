@@ -41,6 +41,9 @@ inputs:
   tag_semver:
     description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
     required: false
+  master_image:
+    description: 'Name used for the image based on master branch (latest by default)'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'

@@ -38,6 +38,7 @@ main() {
   DOCKERNAME="${INPUT_NAME}:${FIRST_TAG}"
   BUILDPARAMS=""
   CONTEXT="."
+  MASTER_IMAGE="latest"
 
   if uses "${INPUT_DOCKERFILE}"; then
     useCustomDockerfile
@@ -53,6 +54,9 @@ main() {
   fi
   if usesBoolean "${INPUT_SNAPSHOT}"; then
     useSnapshot
+  fi
+  if uses "${INPUT_MASTER_IMAGE}"; then
+    MASTER_IMAGE="${INPUT_MASTER_IMAGE}"
   fi
 
   push
