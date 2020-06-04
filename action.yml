@@ -29,6 +29,9 @@ inputs:
   buildargs:
     description: 'Use buildargs when you want to pass a list of environment variables as build-args'
     required: false
+  buildoptions:
+    description: 'Use buildoptions when you want to configure options for building'
+    required: false
   cache:
     description: 'Use cache when you have big images, that you would only like to build partially'
     required: false
