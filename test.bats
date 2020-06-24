@@ -98,20 +98,37 @@ teardown() {
 /usr/local/bin/docker push my/repository:latest"
 }
 
-@test "with tag semver it pushes tags using the major and minor versions" {
-  export GITHUB_REF='refs/tags/v1.2.34'
+@test "with tag semver it pushes tags using the major and minor versions (single digit)" {
+  export GITHUB_REF='refs/tags/v1.2.3'
   export INPUT_TAG_SEMVER="true"
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::1.2.34"
+  expectStdOutContains "::set-output name=tag::1.2.3"
 
   expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:1.2.34 -t my/repository:1.2 -t my/repository:1 .
-/usr/local/bin/docker push my/repository:1.2.34
+/usr/local/bin/docker build -t my/repository:1.2.3 -t my/repository:1.2 -t my/repository:1 .
+/usr/local/bin/docker push my/repository:1.2.3
 /usr/local/bin/docker push my/repository:1.2
 /usr/local/bin/docker push my/repository:1
-/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.2.34
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.2.3
+/usr/local/bin/docker logout"
+}
+
+@test "with tag semver it pushes tags using the major and minor versions (multi digits)" {
+  export GITHUB_REF='refs/tags/v12.345.5678'
+  export INPUT_TAG_SEMVER="true"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::12.345.5678"
+
+  expectMockCalled "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:12.345.5678 -t my/repository:12.345 -t my/repository:12 .
+/usr/local/bin/docker push my/repository:12.345.5678
+/usr/local/bin/docker push my/repository:12.345
+/usr/local/bin/docker push my/repository:12
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:12.345.5678
 /usr/local/bin/docker logout"
 }
 
