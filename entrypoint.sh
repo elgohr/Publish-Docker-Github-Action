@@ -91,7 +91,7 @@ translateDockerTag() {
   elif isOnMaster; then
     TAGS="latest"
   elif isGitTag && usesBoolean "${INPUT_TAG_SEMVER}" && isSemver "${GITHUB_REF}"; then
-    TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9+])\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?/\1.\2.\3\4 \1.\2\4 \1\4/g")
+    TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?/\1.\2.\3\4 \1.\2\4 \1\4/g")
   elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
   elif isGitTag; then
@@ -149,7 +149,7 @@ usesBoolean() {
 }
 
 isSemver() {
-  echo "${1}" | grep -Eq '^refs/tags/v?([0-9]+)\.([0-9+])\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?$'
+  echo "${1}" | grep -Eq '^refs/tags/v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?$'
 }
 
 useSnapshot() {
