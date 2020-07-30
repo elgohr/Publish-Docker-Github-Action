@@ -26,6 +26,9 @@ inputs:
   workdir:
     description: 'Use workdir when you would like to change the directory for building'
     required: false
+  context:
+    description: 'Use context when you would like to change the Docker build context.'
+    required: false
   buildargs:
     description: 'Use buildargs when you want to pass a list of environment variables as build-args'
     required: false
