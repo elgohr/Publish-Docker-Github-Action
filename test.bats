@@ -591,6 +591,15 @@ teardown() {
 + sanitize my/repository name"
 }
 
+@test "it is ok with complexer passwords" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_PASSWORD='9eL89n92G@!#o^$!&3Nz89F@%9'
+
+  run /entrypoint.sh
+
+  expectMockArgs '/usr/local/bin/docker 9eL89n92G@!#o^$!&3Nz89F@%9'
+}
+
 expectStdOutContains() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
@@ -601,7 +610,15 @@ expectStdOutContains() {
 
 expectMockCalled() {
   local expected=$(echo "${1}" | tr -d '\n')
-  local got=$(cat mockCalledWith | tr -d '\n')
+  local got=$(cat mockArgs | tr -d '\n')
+  echo "Expected: |${expected}|
+  Got: |${got}|"
+  echo "${got}" | grep "${expected}"
+}
+
+expectMockArgs() {
+  local expected=$(echo "${1}" | tr -d '\n')
+  local got=$(cat mockStdin | tr -d '\n')
   echo "Expected: |${expected}|
   Got: |${got}|"
   echo "${got}" | grep "${expected}"

@@ -1,7 +1,9 @@
 #!/bin/bash
 binary="$0"
 parameters="$@"
-echo "${binary} ${parameters}" >> mockCalledWith
+echo "${binary} ${parameters}" >> mockArgs
+stdin=$(cat -)
+echo "${binary} ${stdin}" >> mockStdin
 
 function mockShouldFail() {
   [ "${MOCK_RETURNS[${binary}]}" = "_${parameters}" ]
