@@ -162,6 +162,18 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         cache: ${{ github.event_name != 'schedule' }}
 ```
+
+### no_push
+Use `no_push` when you want to build an image, but not push it to a registry.
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  no_push: ${{ github.event_name == 'push' }}
+```
+
 ### Tags
 
 This action supports multiple options that tags are handled.  

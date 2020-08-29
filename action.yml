@@ -47,6 +47,9 @@ inputs:
   tag_semver:
     description: 'Push semver docker tags. e.g. image:1.2.3, image:1.2, image:1'
     required: false
+  no_push:
+    description: 'Set no_push to true if you want to prevent the action from pushing to a registry (default: false)'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'

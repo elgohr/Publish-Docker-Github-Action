@@ -55,6 +55,13 @@ main() {
     useSnapshot
   fi
 
+  build
+  
+  if usesBoolean "${INPUT_NO_PUSH}"; then
+    docker logout
+    exit 0
+  fi
+
   push
 
   echo "::set-output name=tag::${FIRST_TAG}"
@@ -160,13 +167,15 @@ useSnapshot() {
   echo "::set-output name=snapshot-tag::${SNAPSHOT_TAG}"
 }
 
-push() {
+build() {
   local BUILD_TAGS=""
   for TAG in ${TAGS}; do
     BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${TAG} "
   done
   docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+}
 
+push() {
   for TAG in ${TAGS}; do
     docker push "${INPUT_NAME}:${TAG}"
   done
