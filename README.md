@@ -81,7 +81,7 @@ Use `default_branch` when you want to use a different branch than `master` as th
 
 ```yaml
 with:
-  name: owner/repository/image
+  name: myDocker/repository
   username: ${{ secrets.DOCKER_USERNAME }}
   password: ${{ secrets.DOCKER_PASSWORD }}
   default_branch: trunk
