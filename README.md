@@ -47,9 +47,12 @@ If you would like to publish the image to other registries, these actions might 
 ## Optional Arguments
 
 ### registry
-Use `registry` for pushing to a custom registry.
-> NOTE: GitHub's Docker registry uses a different path format to Docker Hub, as shown below. See [Configuring Docker for use with GitHub Package Registry](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-docker-for-use-with-github-package-registry#publishing-a-package) for more information.
-If you're using GitHub Packages, you might also want to use `${{ github.actor }}` as the `username`.
+Use `registry` for pushing to a custom registry.  
+
+As GitHub Packages Docker registry uses a different path format to GitHub Container Registry or Docker Hub. See [Configuring Docker for use with GitHub Package Registry](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-docker-for-use-with-github-package-registry#publishing-a-package) for more information.  
+For publishing to GitHub Container Registry please see [Migrating to GitHub Container Registry for Docker images](https://docs.github.com/en/packages/getting-started-with-github-container-registry/migrating-to-github-container-registry-for-docker-images).
+
+If you're using GitHub Packages Docker or GitHub Container Registry, you might also want to use `${{ github.actor }}` as the `username`.  
 
 ```yaml
 with:
