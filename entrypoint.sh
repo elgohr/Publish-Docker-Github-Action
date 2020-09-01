@@ -95,7 +95,7 @@ translateDockerTag() {
   if hasCustomTag; then
     TAGS=$(echo "${INPUT_NAME}" | cut -d':' -f2)
     INPUT_NAME=$(echo "${INPUT_NAME}" | cut -d':' -f1)
-  elif isOnMaster; then
+  elif isOnDefaultBranch; then
     TAGS="latest"
   elif isGitTag && usesBoolean "${INPUT_TAG_SEMVER}" && isSemver "${GITHUB_REF}"; then
     TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?/\1.\2.\3\4 \1.\2\4 \1\4/g")
@@ -114,8 +114,12 @@ hasCustomTag() {
   [ $(echo "${INPUT_NAME}" | sed -e "s/://g") != "${INPUT_NAME}" ]
 }
 
-isOnMaster() {
-  [ "${BRANCH}" = "master" ]
+isOnDefaultBranch() {
+  local DEFAULT_BRANCH="master"
+  if uses "${INPUT_DEFAULT_BRANCH}"; then
+    DEFAULT_BRANCH="${INPUT_DEFAULT_BRANCH}"
+  fi
+  [ "${BRANCH}" = "${DEFAULT_BRANCH}" ]
 }
 
 isGitTag() {

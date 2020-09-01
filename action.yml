@@ -20,6 +20,9 @@ inputs:
   snapshot:
     description: 'Use snapshot to push an additional image'
     required: false
+  default_branch:
+    description: 'Set the default branch of your repository (default: master)'
+    required: false
   dockerfile:
     description: 'Use dockerfile when you would like to explicitly build a Dockerfile'
     required: false
