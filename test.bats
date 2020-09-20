@@ -25,6 +25,20 @@ teardown() {
   unset MOCK_ERROR_CONDITION
 }
 
+@test "it pushes main branch to latest" {
+  export GITHUB_REF='refs/heads/main'
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::latest"
+
+  expectMockCalledContains "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:latest .
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest
+/usr/local/bin/docker logout"
+}
+
 @test "it pushes master branch to latest" {
   export GITHUB_REF='refs/heads/master'
 

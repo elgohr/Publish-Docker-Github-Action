@@ -115,11 +115,11 @@ hasCustomTag() {
 }
 
 isOnDefaultBranch() {
-  local DEFAULT_BRANCH="master"
   if uses "${INPUT_DEFAULT_BRANCH}"; then
-    DEFAULT_BRANCH="${INPUT_DEFAULT_BRANCH}"
+    [ "${BRANCH}" = "${INPUT_DEFAULT_BRANCH}" ]
+  else
+    [ "${BRANCH}" = "master" ] || [ "${BRANCH}" = "main" ]
   fi
-  [ "${BRANCH}" = "${DEFAULT_BRANCH}" ]
 }
 
 isGitTag() {
