@@ -107,7 +107,7 @@ translateDockerTag() {
     local SPECIAL=$(echo "${VERSION}" | sed -E "s/${RE}/\5/g")
 
     if [ -z "$SPECIAL" ]; then
-      TAGS="${MAJOR} ${MAJOR}.${MINOR} ${MAJOR}.${MINOR}.${PATCH}"
+      TAGS="${MAJOR}.${MINOR}.${PATCH} ${MAJOR}.${MINOR} ${MAJOR}"
     else 
       TAGS="$MAJOR.$MINOR.$PATCH-$SPECIAL"
     fi;
