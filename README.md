@@ -261,3 +261,14 @@ with:
   password: ${{ secrets.DOCKER_PASSWORD }}
   tag_semver: true
 ```
+
+#### include_latest
+Always push the `latest` tag, when you want ot push tags using `tags` or `tag_semver` as well as `latest`
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  tag_semver: true
+  include_latest: true
+```

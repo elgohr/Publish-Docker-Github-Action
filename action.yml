@@ -53,6 +53,9 @@ inputs:
   no_push:
     description: 'Set no_push to true if you want to prevent the action from pushing to a registry (default: false)'
     required: false
+  include_latest:
+    description: 'Always push latest tag'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'

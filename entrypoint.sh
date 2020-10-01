@@ -108,6 +108,10 @@ translateDockerTag() {
   else
     TAGS="${BRANCH}"
   fi;
+
+  if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
+    TAGS="latest ${TAGS}"
+  fi;
 }
 
 hasCustomTag() {
