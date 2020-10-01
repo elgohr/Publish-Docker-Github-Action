@@ -103,7 +103,7 @@ translateDockerTag() {
     local VERSION=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
     local MAJOR=$(echo "${VERSION}" | sed -E "s/${RE}/\1/g")
     local MINOR=$(echo "${VERSION}" | sed -E "s/${RE}/\2/g")
-    local MINOR=$(echo "${VERSION}" | sed -E "s/${RE}/\3/g")
+    local PATCH=$(echo "${VERSION}" | sed -E "s/${RE}/\3/g")
     local SPECIAL=$(echo "${VERSION}" | sed -E "s/${RE}/\4/g")
 
     if [ -z "$SPECIAL" ]; then
