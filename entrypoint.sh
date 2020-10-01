@@ -98,7 +98,24 @@ translateDockerTag() {
   elif isOnDefaultBranch; then
     TAGS="latest"
   elif isGitTag && usesBoolean "${INPUT_TAG_SEMVER}" && isSemver "${GITHUB_REF}"; then
-    TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?/\1.\2.\3\4 \1.\2\4 \1\4/g")
+    local RE='v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z-]+)?'
+
+    local VERSION=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
+    local MAJOR=$(echo "${VERSION}" | sed -E "s/${RE}/\1/g")
+    local MINOR=$(echo "${VERSION}" | sed -E "s/${RE}/\2/g")
+    local MINOR=$(echo "${VERSION}" | sed -E "s/${RE}/\3/g")
+    local SPECIAL=$(echo "${VERSION}" | sed -E "s/${RE}/\4/g")
+
+    if [ -z "$SPECIAL" ]; then
+      TAGS="$MAJOR $MAJOR.$MINOR $MAJOR.$MINOR.$PATCH"
+    else 
+      TAGS="$MAJOR.$MINOR.$PATCH$SPECIAL"
+    fi;
+
+    if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
+      TAGS="latest ${TAGS}"
+    fi;
+    
   elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
   elif isGitTag; then
@@ -107,10 +124,6 @@ translateDockerTag() {
     TAGS="${GITHUB_SHA}"
   else
     TAGS="${BRANCH}"
-  fi;
-
-  if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
-    TAGS="latest ${TAGS}"
   fi;
 }
 

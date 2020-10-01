@@ -262,8 +262,8 @@ with:
   tag_semver: true
 ```
 
-#### include_latest
-Always push the `latest` tag, when you want ot push tags using `tags` or `tag_semver` as well as `latest`
+#### include_latest (when using `tag_semver`)
+Always push the `latest` tag when using `tag_semver`, when you want ot push tags using `tags` or `tag_semver` as well as `latest`
 ```yaml
 with:
   name: myDocker/repository
