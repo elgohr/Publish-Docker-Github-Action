@@ -98,18 +98,18 @@ translateDockerTag() {
   elif isOnDefaultBranch; then
     TAGS="latest"
   elif isGitTag && usesBoolean "${INPUT_TAG_SEMVER}" && isSemver "${GITHUB_REF}"; then
-    local RE='v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z-]+)?'
+    local RE='v?([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z\-\.]*))?'
 
     local VERSION=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
     local MAJOR=$(echo "${VERSION}" | sed -E "s/${RE}/\1/g")
     local MINOR=$(echo "${VERSION}" | sed -E "s/${RE}/\2/g")
     local PATCH=$(echo "${VERSION}" | sed -E "s/${RE}/\3/g")
-    local SPECIAL=$(echo "${VERSION}" | sed -E "s/${RE}/\4/g")
+    local SPECIAL=$(echo "${VERSION}" | sed -E "s/${RE}/\5/g")
 
     if [ -z "$SPECIAL" ]; then
-      TAGS="$MAJOR $MAJOR.$MINOR $MAJOR.$MINOR.$PATCH"
+      TAGS="${MAJOR} ${MAJOR}.${MINOR} ${MAJOR}.${MINOR}.${PATCH}"
     else 
-      TAGS="$MAJOR.$MINOR.$PATCH$SPECIAL"
+      TAGS="$MAJOR.$MINOR.$PATCH-$SPECIAL"
     fi;
 
     if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
