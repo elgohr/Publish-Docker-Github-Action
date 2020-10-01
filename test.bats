@@ -161,10 +161,8 @@ teardown() {
     expectStdOutContains "::set-output name=tag::1.1.1-${SUFFIX}"
 
     expectMockCalledContains "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} -t my/repository:1.1-${SUFFIX} -t my/repository:1-${SUFFIX} .
+/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} .
 /usr/local/bin/docker push my/repository:1.1.1-${SUFFIX}
-/usr/local/bin/docker push my/repository:1.1-${SUFFIX}
-/usr/local/bin/docker push my/repository:1-${SUFFIX}
 /usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.1.1-${SUFFIX}
 /usr/local/bin/docker logout"
   done
