@@ -108,14 +108,15 @@ translateDockerTag() {
 
     if [ -z "$SPECIAL" ]; then
       TAGS="${MAJOR}.${MINOR}.${PATCH} ${MAJOR}.${MINOR} ${MAJOR}"
+
+      if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
+        TAGS="${TAGS} latest"
+      fi;
+
     else 
       TAGS="$MAJOR.$MINOR.$PATCH-$SPECIAL"
     fi;
 
-    if usesBoolean "${INPUT_INCLUDE_LATEST}"; then
-      TAGS="latest ${TAGS}"
-    fi;
-    
   elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
   elif isGitTag; then

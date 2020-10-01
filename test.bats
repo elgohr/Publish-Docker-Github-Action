@@ -130,6 +130,25 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
+@test "with tag semver and include latest it pushes tags using the major and minor versions (single digit) and latest" {
+  export GITHUB_REF='refs/tags/v1.2.3'
+  export INPUT_TAG_SEMVER="true"
+  export INPUT_INCLUDE_LATEST="true"
+
+  run /entrypoint.sh
+
+  expectStdOutContains "::set-output name=tag::1.2.3"
+
+  expectMockCalledContains "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:1.2.3 -t my/repository:1.2 -t my/repository:1 -t my/repository:latest .
+/usr/local/bin/docker push my/repository:1.2.3
+/usr/local/bin/docker push my/repository:1.2
+/usr/local/bin/docker push my/repository:1
+/usr/local/bin/docker push my/repository:latest
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.2.3
+/usr/local/bin/docker logout"
+}
+
 @test "with tag semver it pushes tags using the major and minor versions (multi digits)" {
   export GITHUB_REF='refs/tags/v12.345.5678'
   export INPUT_TAG_SEMVER="true"
@@ -147,7 +166,7 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
-@test "with tag semver it pushes tags using the pre-releases" {
+@test "with tag semver and special it pushes a tag using only pre-releases" {
   # https://semver.org/#spec-item-11
 
   SUFFIXES=('alpha.1' 'alpha' 'ALPHA' 'ALPHA.11' 'beta' 'rc.11')
@@ -155,6 +174,28 @@ teardown() {
   do
     export GITHUB_REF="refs/tags/v1.1.1-${SUFFIX}"
     export INPUT_TAG_SEMVER="true"
+
+    run /entrypoint.sh
+
+    expectStdOutContains "::set-output name=tag::1.1.1-${SUFFIX}"
+
+    expectMockCalledContains "/usr/local/bin/docker login -u USERNAME --password-stdin
+/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} .
+/usr/local/bin/docker push my/repository:1.1.1-${SUFFIX}
+/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.1.1-${SUFFIX}
+/usr/local/bin/docker logout"
+  done
+}
+
+@test "with tag semver and include latest with special it pushes a tag using only pre-releases without latest" {
+  # https://semver.org/#spec-item-11
+
+  SUFFIXES=('alpha.1' 'alpha' 'ALPHA' 'ALPHA.11' 'beta' 'rc.11')
+  for SUFFIX in "${SUFFIXES[@]}"
+  do
+    export GITHUB_REF="refs/tags/v1.1.1-${SUFFIX}"
+    export INPUT_TAG_SEMVER="true"
+    export INPUT_INCLUDE_LATEST="true"
 
     run /entrypoint.sh
 
