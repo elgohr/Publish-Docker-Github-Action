@@ -54,7 +54,7 @@ inputs:
     description: 'Set no_push to true if you want to prevent the action from pushing to a registry (default: false)'
     required: false
   include_latest:
-    description: 'Always push latest tag'
+    description: 'When tag_semver=true, also push `latest` tag for versions without a pre-release component'
     required: false
 outputs:
   tag:

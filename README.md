@@ -264,7 +264,7 @@ with:
 
 #### include_latest (when using `tag_semver`)
 Always push the `latest` tag. This only applies when using `tag_semver`, 
-and the version doesn't contain a special component (i.e. any non-number character after the patch part)
+and the version doesn't contain a pre-release component (i.e. any non-number character after the patch part)
 
 ```yaml
 with:
