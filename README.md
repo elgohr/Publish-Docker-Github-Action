@@ -263,7 +263,9 @@ with:
 ```
 
 #### include_latest (when using `tag_semver`)
-Always push the `latest` tag when using `tag_semver`, when you want ot push tags using `tags` or `tag_semver` as well as `latest`
+Always push the `latest` tag. This only applies when using `tag_semver`, 
+and the version doesn't contain a special component (i.e. any non-number character after the patch part)
+
 ```yaml
 with:
   name: myDocker/repository
