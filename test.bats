@@ -147,7 +147,8 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
-@test "with tag semver it pushes tags using the pre-releases" {
+@test "with tag semver it pushes tags using the pre-release, but does not update the major, minor or patch version" {
+  # as pre-release versions tend to be unstable
   # https://semver.org/#spec-item-11
 
   SUFFIXES=('alpha.1' 'alpha' 'ALPHA' 'ALPHA.11' 'beta' 'rc.11')
@@ -161,10 +162,8 @@ teardown() {
     expectStdOutContains "::set-output name=tag::1.1.1-${SUFFIX}"
 
     expectMockCalledContains "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} -t my/repository:1.1-${SUFFIX} -t my/repository:1-${SUFFIX} .
+/usr/local/bin/docker build -t my/repository:1.1.1-${SUFFIX} .
 /usr/local/bin/docker push my/repository:1.1.1-${SUFFIX}
-/usr/local/bin/docker push my/repository:1.1-${SUFFIX}
-/usr/local/bin/docker push my/repository:1-${SUFFIX}
 /usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:1.1.1-${SUFFIX}
 /usr/local/bin/docker logout"
   done
