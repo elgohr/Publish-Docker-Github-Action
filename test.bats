@@ -622,9 +622,7 @@ teardown() {
 
   expectStdOutIs ""
 
-  expectMockCalledIs "/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker build -t my/repository:latest .
-/usr/local/bin/docker logout"
+  expectMockCalledIs "/usr/local/bin/docker build -t my/repository:latest ."
 }
 
 @test "it can change the default branch" {
