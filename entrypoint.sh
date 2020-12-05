@@ -11,8 +11,10 @@ main() {
   fi
   
   sanitize "${INPUT_NAME}" "name"
-  sanitize "${INPUT_USERNAME}" "username"
-  sanitize "${INPUT_PASSWORD}" "password"
+  if ! usesBoolean "${INPUT_NO_PUSH}"; then
+    sanitize "${INPUT_USERNAME}" "username"
+    sanitize "${INPUT_PASSWORD}" "password"
+  fi
 
   registryToLower
   nameToLower
@@ -32,7 +34,9 @@ main() {
     changeWorkingDirectory
   fi
 
-  echo "${INPUT_PASSWORD}" | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  if ! usesBoolean "${INPUT_NO_PUSH}"; then
+    echo "${INPUT_PASSWORD}" | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  fi
 
   FIRST_TAG=$(echo "${TAGS}" | cut -d ' ' -f1)
   DOCKERNAME="${INPUT_NAME}:${FIRST_TAG}"
@@ -58,7 +62,6 @@ main() {
   build
   
   if usesBoolean "${INPUT_NO_PUSH}"; then
-    docker logout
     exit 0
   fi
 
