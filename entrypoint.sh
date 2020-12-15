@@ -9,10 +9,12 @@ main() {
     echo "::add-mask::${INPUT_PASSWORD}"
     set -x
   fi
-  
+
   sanitize "${INPUT_NAME}" "name"
-  sanitize "${INPUT_USERNAME}" "username"
-  sanitize "${INPUT_PASSWORD}" "password"
+  if ! usesBoolean "${INPUT_NO_PUSH}"; then
+    sanitize "${INPUT_USERNAME}" "username"
+    sanitize "${INPUT_PASSWORD}" "password"
+  fi
 
   registryToLower
   nameToLower
@@ -24,7 +26,7 @@ main() {
 
   if uses "${INPUT_TAGS}"; then
     TAGS=$(echo "${INPUT_TAGS}" | sed "s/,/ /g")
-  else 
+  else
     translateDockerTag
   fi
 
@@ -32,7 +34,9 @@ main() {
     changeWorkingDirectory
   fi
 
-  echo "${INPUT_PASSWORD}" | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
+    echo "${INPUT_PASSWORD}" | docker login -u ${INPUT_USERNAME} --password-stdin ${INPUT_REGISTRY}
+  fi
 
   FIRST_TAG=$(echo "${TAGS}" | cut -d ' ' -f1)
   DOCKERNAME="${INPUT_NAME}:${FIRST_TAG}"
@@ -56,9 +60,11 @@ main() {
   fi
 
   build
-  
+
   if usesBoolean "${INPUT_NO_PUSH}"; then
-    docker logout
+    if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
+      docker logout
+    fi
     exit 0
   fi
 

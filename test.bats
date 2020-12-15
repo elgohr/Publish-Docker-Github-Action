@@ -627,6 +627,18 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
+@test "it can be used for building without login" {
+  export GITHUB_REF='refs/heads/master'
+  export INPUT_NO_PUSH='true'
+  export INPUT_USERNAME=''
+
+  run /entrypoint.sh
+
+  expectStdOutIs ""
+
+  expectMockCalledIs "/usr/local/bin/docker build -t my/repository:latest ."
+}
+
 @test "it can change the default branch" {
   export GITHUB_REF='refs/heads/trunk'
   export INPUT_DEFAULT_BRANCH='trunk'
