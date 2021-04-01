@@ -16,6 +16,10 @@ main() {
     sanitize "${INPUT_PASSWORD}" "password"
   fi
 
+  if uses "${INPUT_PLATFORMS}"; then
+    enableExperimentalDocker
+  fi
+
   registryToLower
   nameToLower
 
@@ -82,6 +86,11 @@ sanitize() {
     >&2 echo "Unable to find the ${2}. Did you set with.${2}?"
     exit 1
   fi
+}
+
+enableExperimentalDocker() {
+  echo $'{"experimental": true}' | sudo dd status=none of=/etc/docker/daemon.json
+  sudo service docker restart
 }
 
 registryToLower(){
@@ -190,7 +199,12 @@ build() {
   for TAG in ${TAGS}; do
     BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${TAG} "
   done
-  docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  if uses "${INPUT_PLATFORMS}"; then
+    local PLATFORMS="--platform ${INPUT_PLATFORMS}"
+    docker buildx build ${PLATFORMS} ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  else
+    docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  fi
 }
 
 push() {

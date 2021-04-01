@@ -188,6 +188,17 @@ with:
   no_push: ${{ github.event_name == 'push' }}
 ```
 
+### platforms
+Use `platforms` when you want to build a multi-platform image (separated by comma).
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  platforms: linux/amd64,linux/arm64
+```
+
 ### Tags
 
 This action supports multiple options that tags are handled.  
