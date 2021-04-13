@@ -656,24 +656,6 @@ teardown() {
 /usr/local/bin/docker logout"
 }
 
-@test "it supports building multiple platforms" {
-  export GITHUB_REF='refs/heads/main'
-  export INPUT_PLATFORMS='linux/amd64,linux/arm64'
-
-  run /entrypoint.sh
-
-  expectStdOutContains "::set-output name=tag::latest"
-
-  expectMockCalledContains "/usr/bin/sudo dd status=none of=/etc/docker/daemon.json
-/usr/bin/sudo service docker restart
-/usr/local/bin/docker login -u USERNAME --password-stdin
-/usr/local/bin/docker buildx build --platform linux/amd64,linux/arm64 -t my/repository:latest .
-/usr/local/bin/docker push my/repository:latest
-/usr/local/bin/docker inspect --format={{index .RepoDigests 0}} my/repository:latest
-/usr/local/bin/docker logout"
-  expectMockArgs '/usr/bin/sudo {"experimental": true}'
-}
-
 expectStdOutIs() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')

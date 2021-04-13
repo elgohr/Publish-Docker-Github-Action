@@ -44,9 +44,6 @@ inputs:
   tags:
     description: 'Use tags when you want to bring your own tags (separated by comma)'
     required: false
-  platforms:
-    description: 'Use platforms to build multi-platform images (separated by comma)'
-    required: false
   tag_names:
     description: 'Use tag_names when you want to push tags/release by their git name'
     required: false
