@@ -1,5 +1,5 @@
 daysUntilStale: 21
-daysUntilClose: 7
+daysUntilClose: 180
 exemptLabels:
   - pinned
   - security
