@@ -226,10 +226,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish to Registry
-      pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: myDocker/repository
+        pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
