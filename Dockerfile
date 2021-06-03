@@ -1,4 +1,4 @@
-FROM docker:20.10.6 as runtime
+FROM docker:20.10.7 as runtime
 LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
 LABEL "maintainer"="Lars Gohr"
 
