@@ -69,6 +69,7 @@ main() {
   fi
 
   if usesBoolean "${INPUT_CHECK_EXISTING}" && tagExists; then
+    echo "The tag already exists and check_existing is set. Skipping push"
     if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
       docker logout
     fi
