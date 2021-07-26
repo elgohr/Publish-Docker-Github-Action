@@ -61,15 +61,15 @@ main() {
 
   build
 
-  if usesBoolean "${INPUT_NO_PUSH}"; then
+  if usesBoolean "${INPUT_CHECK_EXISTING}" && tagExists; then
+    echo "The tag already exists and check_existing is set. Skipping push"
     if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
       docker logout
     fi
     exit 0
   fi
 
-  if usesBoolean "${INPUT_CHECK_EXISTING}" && tagExists; then
-    echo "The tag already exists and check_existing is set. Skipping push"
+  if usesBoolean "${INPUT_NO_PUSH}"; then
     if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
       docker logout
     fi
