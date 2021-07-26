@@ -188,6 +188,17 @@ with:
   no_push: ${{ github.event_name == 'push' }}
 ```
 
+### check_existing
+Use `check_existing` when you do not want to push an image to a registry if the tag exists
+
+```yaml
+with:
+  name: myDocker/repository
+  username: ${{ secrets.DOCKER_USERNAME }}
+  password: ${{ secrets.DOCKER_PASSWORD }}
+  no_push: ${{ github.event_name == 'push' }}
+```
+
 ### Tags
 
 This action supports multiple options that tags are handled.  
