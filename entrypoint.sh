@@ -68,6 +68,13 @@ main() {
     exit 0
   fi
 
+  if usesBoolean "${INPUT_CHECK_EXISTING}" && tagExists; then
+    if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
+      docker logout
+    fi
+    exit 0
+  fi
+
   push
 
   echo "::set-output name=tag::${FIRST_TAG}"
@@ -183,6 +190,11 @@ useSnapshot() {
   local SNAPSHOT_TAG="${TIMESTAMP}${SHORT_SHA}"
   TAGS="${TAGS} ${SNAPSHOT_TAG}"
   echo "::set-output name=snapshot-tag::${SNAPSHOT_TAG}"
+}
+
+tagExists() {
+  docker manifest inspect "${INPUT_NAME}:${TAG}" > /dev/null;
+  return $?
 }
 
 build() {

@@ -53,6 +53,9 @@ inputs:
   no_push:
     description: 'Set no_push to true if you want to prevent the action from pushing to a registry (default: false)'
     required: false
+  check_existing:
+    description: 'Set check_existing to true if you want to prevent the action from pushing to a registry if the tag exists (default: false)'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'
