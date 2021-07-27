@@ -194,8 +194,9 @@ useSnapshot() {
 }
 
 tagExists() {
+  echo "Testing existance of: ${TAGS}"
   for TAG in ${TAGS}; do
-    if tag=="latest"; then
+    if [$TAG == "latest"]; then
       echo "Skipping existance check for 'latest' tag"
       continue
     fi
