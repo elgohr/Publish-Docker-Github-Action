@@ -203,7 +203,7 @@ tagExists() {
     echo "Testing existance of: ${INPUT_NAME}:${TAG}"
     docker manifest inspect "${INPUT_NAME}:${TAG}" > /dev/null;
     local EXISTS=$?
-    if [ $EXISTS == 0 ]; then
+    if [ ${EXISTS} == 0 ]; then
       echo "${INPUT_NAME}:${TAG} already exists"
       return exists
     fi
