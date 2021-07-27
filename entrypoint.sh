@@ -206,9 +206,10 @@ tagExists() {
     echo "EXISTS=${EXISTS}"
     if [ ${EXISTS} == 0 ]; then
       echo "${INPUT_NAME}:${TAG} already exists"
-      return exists
+      return 1
     fi
   done
+  return 0
 }
 
 build() {
