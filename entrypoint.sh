@@ -202,8 +202,8 @@ tagExists() {
     fi
     echo "Testing existance of: ${INPUT_NAME}:${TAG}"
     docker manifest inspect "${INPUT_NAME}:${TAG}" > /dev/null;
-    local exists = $?
-    if exists; then
+    local EXISTS=$?
+    if $EXISTS; then
       echo "${INPUT_NAME}:${TAG} already exists"
       return exists
     fi
