@@ -194,7 +194,6 @@ useSnapshot() {
 }
 
 tagExists() {
-  echo "Testing existance of: ${TAGS}"
   for TAG in ${TAGS}; do
     if [ "$TAG" == "latest" ]; then
       echo "Skipping existance check for 'latest' tag"
@@ -206,10 +205,10 @@ tagExists() {
     echo "EXISTS=${EXISTS}"
     if [ ${EXISTS} == 0 ]; then
       echo "${INPUT_NAME}:${TAG} already exists"
-      return 1
+      return 0
     fi
   done
-  return 0
+  return 1
 }
 
 build() {
