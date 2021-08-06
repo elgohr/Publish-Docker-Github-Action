@@ -57,9 +57,9 @@ If you're using GitHub Packages Docker or GitHub Container Registry, you might a
 ```yaml
 with:
   name: owner/repository/image
-  username: ${{ secrets.DOCKER_USERNAME }}
-  password: ${{ secrets.DOCKER_PASSWORD }}
-  registry: docker.pkg.github.com
+  username: ${{ github.actor }}
+  password: ${{ secrets.GITHUB_TOKEN }}
+  registry: ghcr.io
 ```
 
 ### snapshot
