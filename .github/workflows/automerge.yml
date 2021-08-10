@@ -1,6 +1,6 @@
 on:
   pull_request_target:
-    branches: [ main ]
+    branches: [ master ]
     types: [ opened ]
 jobs:
   enableAutoMerge:
