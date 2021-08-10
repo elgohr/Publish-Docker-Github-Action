@@ -9,6 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish to Registry
+      if: ${{ github.actor != 'dependabot[bot]' }}
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action
