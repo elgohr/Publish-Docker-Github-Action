@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Publish to Registry
       if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: ./
       with:
         name: lgohr/publish-docker-github-action
         username: ${{ secrets.DOCKER_USERNAME }}
