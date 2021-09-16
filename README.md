@@ -207,7 +207,6 @@ Use `tags` when you want to bring your own tags (separated by comma).
     tags: "latest,another"
 ```
 
-When using dynamic tag names the environment variable must be set via echo, as variables set in the environment will not auto resolve by convention.  
 This example illustrates how you would push to latest along with creating a custom version tag in a release. Setting it to only run on published events will keep your tags from being filled with commit hashes and will only publish when a GitHub release is created, so if the GitHub release is 2.14 this will publish to the latest and 2.14 tags.
 
 ```yaml
@@ -226,13 +225,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish to Registry
-      pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
+        tags: "latest,${{ github.event.release.tag_name }}""
 ```
 
 #### tag_names
