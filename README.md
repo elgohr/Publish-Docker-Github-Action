@@ -230,7 +230,7 @@ jobs:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: "latest,${{ github.event.release.tag_name }}""
+        tags: "latest,${{ github.event.release.tag_name }}"
 ```
 
 #### tag_names
