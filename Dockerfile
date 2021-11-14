@@ -1,4 +1,4 @@
-FROM docker:20.10.9@sha256:62302357e804b152e157d3603ce7a97c3f368a626ce027eee1d1e02b5ae924f3 as runtime
+FROM docker:20.10.10@sha256:ef7bb7fae023a1c895370ace48e3f4d470fe2351752565cdf4b3488ecb4a1fa8 as runtime
 LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
 LABEL "maintainer"="Lars Gohr"
 ADD entrypoint.sh /entrypoint.sh
