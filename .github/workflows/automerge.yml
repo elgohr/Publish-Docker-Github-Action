@@ -1,40 +1,21 @@
+name: Dependabot auto-merge
+
 on:
   pull_request_target:
     branches: [ master ]
     types: [ opened ]
+
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   enableAutoMerge:
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: get_pull_request_id
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
         env:
-          GITHUB_TOKEN: ${{ secrets.AUTO_UPDATE }}
-        with:
-          query: |
-            query GetPullRequest($owner:String!,$repository:String!,$pull_request_number:Int!) {
-              repository(owner:$owner,name:$repository) {
-                pullRequest(number:$pull_request_number) {
-                  id
-                }
-              }
-            }
-          owner: ${{ github.event.repository.owner.login }}
-          repository: ${{ github.event.repository.name }}
-          pull_request_number: ${{ github.event.pull_request.number }}
-      - uses: octokit/graphql-action@v2.x
-        id: automerge_pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.AUTO_UPDATE }}
-        with:
-          query: |
-            mutation EnableAutomerge($pull_request_id:String!) {
-              addComment(input: {
-                subjectId: $pull_request_id,
-                body: "@dependabot merge"
-              }) {
-                __typename
-              }
-            }
-          pull_request_id: ${{ fromJson(steps.get_pull_request_id.outputs.data).repository.pullRequest.id }}
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
