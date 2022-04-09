@@ -61,5 +61,7 @@ outputs:
   digest:
     description: 'Is the digest of the image, which was pushed'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'composite'
+  steps:      
+    - run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
