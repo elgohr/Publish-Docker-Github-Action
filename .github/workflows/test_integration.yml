@@ -4,13 +4,13 @@ on:
     branches:
       - main
 jobs:
-  build:
+  integration-test-dockerhub:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Publish to Registry
       if: ${{ github.actor != 'dependabot[bot]' }}
-      uses: ./
+      uses: elgohr/Publish-Docker-Github-Action@main
       with:
         name: lgohr/publish-docker-github-action
         username: ${{ secrets.DOCKER_USERNAME }}
