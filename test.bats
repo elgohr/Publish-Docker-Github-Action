@@ -598,17 +598,6 @@ teardown() {
 /usr/local/mock/docker push my/repository:B"
 }
 
-@test "it is verbose on ACTIONS_STEP_DEBUG" {
-  export GITHUB_REF='refs/heads/master'
-  export ACTIONS_STEP_DEBUG=true
-
-  run /entrypoint.sh
-
-  expectStdOutContains "::add-mask::USERNAME
-::add-mask::PASSWORD
-+ sanitize my/repository name"
-}
-
 @test "it is ok with complexer passwords" {
   export GITHUB_REF='refs/heads/master'
   export INPUT_PASSWORD='9eL89n92G@!#o^$!&3Nz89F@%9'

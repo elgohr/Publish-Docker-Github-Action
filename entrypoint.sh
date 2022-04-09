@@ -4,12 +4,6 @@ set -e
 main() {
   echo "" # see https://github.com/actions/toolkit/issues/168
 
-  if usesBoolean "${ACTIONS_STEP_DEBUG}"; then
-    echo "::add-mask::${INPUT_USERNAME}"
-    echo "::add-mask::${INPUT_PASSWORD}"
-    set -x
-  fi
-
   sanitize "${INPUT_NAME}" "name"
   if ! usesBoolean "${INPUT_NO_PUSH}"; then
     sanitize "${INPUT_USERNAME}" "username"
