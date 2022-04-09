@@ -53,6 +53,9 @@ inputs:
   no_push:
     description: 'Set no_push to true if you want to prevent the action from pushing to a registry (default: false)'
     required: false
+  platforms:
+    description: 'Use platforms for building multi-arch images'
+    required: false
 outputs:
   tag:
     description: 'Is the tag, which was pushed'
@@ -86,3 +89,4 @@ runs:
         INPUT_TAG_NAMES: ${{ inputs.tag_names }}
         INPUT_TAG_SEMVER: ${{ inputs.tag_semver }}
         INPUT_NO_PUSH: ${{ inputs.no_push }}
+        INPUT_PLATFORMS: ${{ inputs.platforms }}

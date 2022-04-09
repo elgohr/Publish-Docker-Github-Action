@@ -62,10 +62,16 @@ main() {
     exit 0
   fi
 
-  push
+  if ! uses "${INPUT_PLATFORMS}"; then
+    push
+  fi
 
   echo "::set-output name=tag::${FIRST_TAG}"
-  DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${DOCKERNAME})
+  if uses "${INPUT_PLATFORMS}"; then
+    DIGEST=$(jq -r '."containerimage.digest"' metadata.json)
+  else 
+    DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${DOCKERNAME})
+  fi
   echo "::set-output name=digest::${DIGEST}"
 
   docker logout
@@ -184,7 +190,12 @@ build() {
   for TAG in ${TAGS}; do
     BUILD_TAGS="${BUILD_TAGS}-t ${INPUT_NAME}:${TAG} "
   done
-  docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  if uses "${INPUT_PLATFORMS}"; then
+    local PLATFORMS="--platform ${INPUT_PLATFORMS}"
+    docker buildx build --push --metadata-file metadata.json ${PLATFORMS} ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  else
+    docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+  fi
 }
 
 push() {
