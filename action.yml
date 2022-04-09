@@ -63,5 +63,22 @@ outputs:
 runs:
   using: 'composite'
   steps:      
-    - run: ${{ github.action_path }}/entrypoint.sh
+    - run: $GITHUB_ACTION_PATH/entrypoint.sh
       shell: bash
+      env:
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_USERNAME: ${{ inputs.username }}
+        INPUT_PASSWORD: ${{ inputs.password }}
+        INPUT_REGISTRY: ${{ inputs.registry }}
+        INPUT_SNAPSHOT: ${{ inputs.snapshot }}
+        INPUT_DEFAULT_BRANCH: ${{ inputs.default_branch }}
+        INPUT_DOCKERFILE: ${{ inputs.dockerfile }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
+        INPUT_CONTEXT: ${{ inputs.context }}
+        INPUT_BUILDARGS: ${{ inputs.buildargs }}
+        INPUT_BUILDOPTIONS: ${{ inputs.buildoptions }}
+        INPUT_CACHE: ${{ inputs.cache }}
+        INPUT_TAGS: ${{ inputs.tags }}
+        INPUT_TAG_NAMES: ${{ inputs.tag_names }}
+        INPUT_TAG_SEMVER: ${{ inputs.tag_semver }}
+        INPUT_NO_PUSH: ${{ inputs.no_push }}
