@@ -3,6 +3,8 @@ set -e
 
 main() {
   echo "" # see https://github.com/actions/toolkit/issues/168
+  echo ">> elgohr/Publish-Docker-Github-Action@master has been deprecated."
+  echo ">> Please use elgohr/Publish-Docker-Github-Action@v4 for a blast in speed and security."
 
   if usesBoolean "${ACTIONS_STEP_DEBUG}"; then
     echo "::add-mask::${INPUT_USERNAME}"

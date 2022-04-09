@@ -624,7 +624,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutIs ""
+  expectStdOutIs ">> elgohr/Publish-Docker-Github-Action@master has been deprecated.>> Please use elgohr/Publish-Docker-Github-Action@v4 for a blast in speed and security."
 
   expectMockCalledIs "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -638,7 +638,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutIs ""
+  expectStdOutIs ">> elgohr/Publish-Docker-Github-Action@master has been deprecated.>> Please use elgohr/Publish-Docker-Github-Action@v4 for a blast in speed and security."
 
   expectMockCalledIs "/usr/local/mock/docker build -t my/repository:latest ."
 }
