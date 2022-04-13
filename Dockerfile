@@ -1,11 +1,17 @@
-FROM docker:20.10.14@sha256:41978d1974f05f80e1aef23ac03040491a7e28bd4551d4b469b43e558341864e as runtime
-LABEL "repository"="https://github.com/elgohr/Publish-Docker-Github-Action"
-LABEL "maintainer"="Lars Gohr"
+FROM ubuntu:20.04@sha256:9101220a875cee98b016668342c489ff0674f247f6ca20dfc91b91c0f28581ae as runtime
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+  && apt-get install -y ca-certificates curl gnupg lsb-release \
+  && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+  && apt-get update \
+  && apt-get install -y docker-ce docker-ce-cli containerd.io
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 FROM runtime as testEnv
-RUN apk add --no-cache coreutils bats
+RUN apt-get install -y coreutils bats
 ADD test.bats /test.bats
 ADD mock.sh /usr/local/mock/docker
 ADD mock.sh /usr/local/mock/date

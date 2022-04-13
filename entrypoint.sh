@@ -101,7 +101,7 @@ translateDockerTag() {
     if isPreRelease "${GITHUB_REF}"; then
       TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z]+(\.[0-9]+)?)?/\1.\2.\3\4/g")
     else
-      TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2.\3\4 \1.\2\4 \1\4/g")
+      TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g" | sed -E "s/v?([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2.\3 \1.\2 \1/g")
     fi
   elif isGitTag && usesBoolean "${INPUT_TAG_NAMES}"; then
     TAGS=$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
