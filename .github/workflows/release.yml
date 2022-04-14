@@ -1,0 +1,63 @@
+name: Release
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build .
+
+  integration-test-github:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Publish to Registry
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: elgohr/Publish-Docker-Github-Action@main
+        with:
+          name: docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+
+  integration-test-dockerhub:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Publish to Registry
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: elgohr/Publish-Docker-Github-Action@main
+        with:
+          name: lgohr/publish-docker-github-action
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          snapshot: true
+          tag_names: true
+
+  release:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    needs:
+      - test
+      - integration-test-github
+      - integration-test-dockerhub
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PUBLISH_TOKEN }} # for pushing to protected branch
+      - name: Publish new version
+        run: |
+          git config --global user.email "no_reply@gohr.digital"
+          git config --global user.name "Release Bot"
+          git tag -fa v4 -m "Update v4 tag"
+          git push origin v4 --force
