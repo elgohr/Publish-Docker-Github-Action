@@ -1,9 +1,11 @@
 name: Release
 on: 
   push:
+    branches: [ main ]
     tags-ignore:
       - 'v*'
   pull_request:
+    branches: [ main ]
 jobs:
   test:
     runs-on: ubuntu-latest
