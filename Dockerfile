@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:d0bca7e423d7eb1f8a334762ca173164b4f8cac656b0ca3ce7f7d198fdb28143 as runtime
+FROM ubuntu:22.04@sha256:2a7dffab37165e8b4f206f61cfd984f8bb279843b070217f6ad310c9c31c9c7c as runtime
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y ca-certificates curl gnupg lsb-release \
