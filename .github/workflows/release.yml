@@ -28,10 +28,10 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' }}
         uses: elgohr/Publish-Docker-Github-Action@main
         with:
-          name: docker.pkg.github.com/elgohr/publish-docker-github-action/publish-docker-github-action
+          name: ghcr.io/elgohr/publish-docker-github-action/publish-docker-github-action
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
+          registry: ghcr.io
 
   integration-test-dockerhub:
     runs-on: ubuntu-latest
