@@ -153,12 +153,18 @@ Use `buildoptions` when you want to configure [options](https://docs.docker.com/
 Use `platforms` when you would like to build for specific target architectures.  
 Architectures are separated by comma.  
 
+`docker/setup-buildx-action` must be executed before a step that contains `platforms`.
+
 ```yaml
-with:
-  name: myDocker/repository
-  username: ${{ secrets.DOCKER_USERNAME }}
-  password: ${{ secrets.DOCKER_PASSWORD }}
-  platforms: linux/amd64,linux/arm64
+- name: Set up Docker Buildx
+  uses: docker/setup-buildx-action@v2
+- name: Publish to Registry
+  uses: elgohr/Publish-Docker-Github-Action@v4
+  with:
+    name: myDocker/repository
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+    platforms: linux/amd64,linux/arm64
 ```
 
 ### cache
