@@ -67,12 +67,14 @@ main() {
   fi
 
   echo "::set-output name=tag::${FIRST_TAG}"
+  echo "tag=${FIRST_TAG}" >> "$GITHUB_ENV"
   if uses "${INPUT_PLATFORMS}"; then
     DIGEST=$(jq -r '."containerimage.digest"' metadata.json)
   else 
     DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${DOCKERNAME})
   fi
   echo "::set-output name=digest::${DIGEST}"
+  echo "digest=${DIGEST}" >> "$GITHUB_ENV"
 
   docker logout
 }
@@ -183,6 +185,7 @@ useSnapshot() {
   local SNAPSHOT_TAG="${TIMESTAMP}${SHORT_SHA}"
   TAGS="${TAGS} ${SNAPSHOT_TAG}"
   echo "::set-output name=snapshot-tag::${SNAPSHOT_TAG}"
+  echo "snapshot-tag=${SNAPSHOT_TAG}" >> "$GITHUB_ENV"
 }
 
 build() {
