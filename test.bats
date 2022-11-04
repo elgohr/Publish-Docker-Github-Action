@@ -2,7 +2,7 @@
 
 setup(){
   export PATH="/usr/local/sbin:/usr/local/mock:/usr/sbin:/usr/bin:/sbin:/bin"
-  export GITHUB_ENV="/tmp/githubOutput"
+  export GITHUB_OUTPUT="/tmp/githubOutput"
 
   cat /dev/null >| mockArgs
   cat /dev/null >| mockStdin
@@ -36,8 +36,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -51,8 +50,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -66,8 +64,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::myBranch"
-  expectGitHubEnvContains "tag=myBranch"
+  expectGitHubOutputContains "tag=myBranch"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:myBranch .
 /usr/local/mock/docker push my/repository:myBranch"
@@ -78,8 +75,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::myBranch-withDash"
-  expectGitHubEnvContains "tag=myBranch-withDash"
+  expectGitHubOutputContains "tag=myBranch-withDash"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:myBranch-withDash .
 /usr/local/mock/docker push my/repository:myBranch-withDash"
@@ -90,8 +86,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -106,8 +101,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::myRelease"
-  expectGitHubEnvContains "tag=myRelease"
+  expectGitHubOutputContains "tag=myRelease"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:myRelease .
 /usr/local/mock/docker push my/repository:myRelease"
@@ -119,8 +113,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:latest .
 /usr/local/mock/docker push my/repository:latest"
@@ -132,8 +125,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::1.2.3"
-  expectGitHubEnvContains "tag=1.2.3"
+  expectGitHubOutputContains "tag=1.2.3"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:1.2.3 -t my/repository:1.2 -t my/repository:1 .
@@ -150,8 +142,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::12.345.5678"
-  expectGitHubEnvContains "tag=12.345.5678"
+  expectGitHubOutputContains "tag=12.345.5678"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:12.345.5678 -t my/repository:12.345 -t my/repository:12 .
@@ -174,8 +165,7 @@ teardown() {
 
     run /entrypoint.sh
 
-    expectStdOutContains "::set-output name=tag::1.1.1-${SUFFIX}"
-    expectGitHubEnvContains "tag=1.1.1-${SUFFIX}"
+    expectGitHubOutputContains "tag=1.1.1-${SUFFIX}"
 
     expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:1.1.1-${SUFFIX} .
@@ -191,8 +181,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::1.2.34"
-  expectGitHubEnvContains "tag=1.2.34"
+  expectGitHubOutputContains "tag=1.2.34"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:1.2.34 -t my/repository:1.2 -t my/repository:1 .
@@ -209,8 +198,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:latest .
 /usr/local/mock/docker push my/repository:latest"
@@ -222,8 +210,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:latest .
 /usr/local/mock/docker push my/repository:latest"
@@ -234,8 +221,7 @@ teardown() {
 
   run /entrypoint.sh  export GITHUB_REF='refs/heads/master'
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build -f MyDockerFileName -t my/repository:latest .
 /usr/local/mock/docker push my/repository:latest"
@@ -252,10 +238,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "
-::set-output name=snapshot-tag::19700101010112169e
-::set-output name=tag::latest"
-  expectGitHubEnvContains "snapshot-tag=19700101010112169etag=latest"
+  expectGitHubOutputContains "snapshot-tag=19700101010112169etag=latest"
 
   expectMockCalledContains "/usr/local/mock/date +%Y%m%d%H%M%S
 /usr/local/mock/docker build -t my/repository:latest -t my/repository:19700101010112169e .
@@ -274,9 +257,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "
-::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:latest .
 /usr/local/mock/docker push my/repository:latest"
@@ -425,9 +406,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "
-::set-output name=tag::12169ed809255604e557a82617264e9c373faca7"
-  expectGitHubEnvContains "tag=12169ed809255604e557a82617264e9c373faca7"
+  expectGitHubOutputContains "tag=12169ed809255604e557a82617264e9c373faca7"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:12169ed809255604e557a82617264e9c373faca7 .
 /usr/local/mock/docker push my/repository:12169ed809255604e557a82617264e9c373faca7"
@@ -438,9 +417,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "
-::set-output name=tag::custom-tag"
-  expectGitHubEnvContains "tag=custom-tag"
+  expectGitHubOutputContains "tag=custom-tag"
 
   expectMockCalledContains "/usr/local/mock/docker build -t my/repository:custom-tag .
 /usr/local/mock/docker push my/repository:custom-tag"
@@ -453,9 +430,8 @@ teardown() {
 
   expectStdOutContains "
 ::add-mask::MY_FIRST
-::add-mask::MY_SECOND
-::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+::add-mask::MY_SECOND"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build --build-arg MY_FIRST --build-arg MY_SECOND -t my/repository:latest ."
 }
@@ -466,9 +442,8 @@ teardown() {
   run /entrypoint.sh
 
   expectStdOutContains "
-::add-mask::MY_ONLY
-::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+::add-mask::MY_ONLY"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker build --build-arg MY_ONLY -t my/repository:latest ."
 }
@@ -549,8 +524,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=digest::my/repository@sha256:53b76152042486bc741fe59f130bfe683b883060c8284271a2586342f35dcd0e"
-  expectGitHubEnvContains "digest=my/repository@sha256:53b76152042486bc741fe59f130bfe683b883060c8284271a2586342f35dcd0e"
+  expectGitHubOutputContains "digest=my/repository@sha256:53b76152042486bc741fe59f130bfe683b883060c8284271a2586342f35dcd0e"
 
   expectMockCalledContains "/usr/local/mock/docker push my/repository:latest
 /usr/local/mock/docker inspect --format={{index .RepoDigests 0}} my/repository:latest"
@@ -661,8 +635,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest"
-  expectGitHubEnvContains "tag=latest"
+  expectGitHubOutputContains "tag=latest"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -715,8 +688,7 @@ EOT
 
   run /entrypoint.sh
 
-  expectStdOutContains "::set-output name=tag::latest::set-output name=digest::sha256:aa2c7631cc1bbf588192ec7e55b428ad92fe63834200303f28e93444d7fc114a"
-  expectGitHubEnvContains "tag=latestdigest=sha256:aa2c7631cc1bbf588192ec7e55b428ad92fe63834200303f28e93444d7fc114a"
+  expectGitHubOutputContains "tag=latestdigest=sha256:aa2c7631cc1bbf588192ec7e55b428ad92fe63834200303f28e93444d7fc114a"
 
   expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker buildx build --push --metadata-file metadata.json --platform linux/amd64,linux/arm64 -t my/repository:latest .
@@ -740,9 +712,9 @@ expectStdOutContains() {
   echo "${got}" | grep "${expected}"
 }
 
-expectGitHubEnvContains() {
+expectGitHubOutputContains() {
   local expected=$(echo "${1}" | tr -d '\n')
-  local got=$(cat "${GITHUB_ENV}" | tr -d '\n')
+  local got=$(cat "${GITHUB_OUTPUT}" | tr -d '\n')
   echo "Expected: |${expected}|
   Got: |${got}|"
   echo "${got}" | grep "${expected}"
