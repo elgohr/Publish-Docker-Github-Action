@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v4
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -125,7 +125,7 @@ All `buildargs` will be masked, so that they don't appear in the logs.
 
 ```yaml
 - name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@v4
+  uses: elgohr/Publish-Docker-Github-Action@v5
   env:
     MY_FIRST: variableContent
     MY_SECOND: variableContent
@@ -141,7 +141,7 @@ Use `buildoptions` when you want to configure [options](https://docs.docker.com/
 
 ```yaml
 - name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@v4
+  uses: elgohr/Publish-Docker-Github-Action@v5
   with:
     name: myDocker/repository
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -159,7 +159,7 @@ Architectures are separated by comma.
 - name: Set up Docker Buildx
   uses: docker/setup-buildx-action@v2
 - name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@v4
+  uses: elgohr/Publish-Docker-Github-Action@v5
   with:
     name: myDocker/repository
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -185,7 +185,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v4
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -215,7 +215,7 @@ Use `tags` when you want to bring your own tags (separated by comma).
 
 ```yaml
 - name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@v4
+  uses: elgohr/Publish-Docker-Github-Action@v5
   with:
     name: myDocker/repository
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -243,7 +243,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Publish to Registry
       pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
-      uses: elgohr/Publish-Docker-Github-Action@v4
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}

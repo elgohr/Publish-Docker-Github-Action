@@ -2,11 +2,12 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| v4      | :white_check_mark: |
-| main    | :white_check_mark: |
-| master  | :x:                |
+| Version | Supported                                |
+| ------- | ---------------------------------------- |
+| v5      | :white_check_mark:                       |
+| v4      | :white_check_mark: (until 31st May 2023) |
+| main    | :white_check_mark:                       |
+| master  | :x:                                      |
 
 Master has been deprecated (https://github.com/elgohr/Publish-Docker-Github-Action/commit/8217e91c0369a5342a4ef2d612de87492410a666) but will stay, so that it will not break peoples pipelines.
 
