@@ -4,6 +4,11 @@
 This Action for [Docker](https://www.docker.com/) uses the Git branch as the [Docker tag](https://docs.docker.com/engine/reference/commandline/tag/) for building and pushing the container.
 Hereby the master-branch is published as the latest-tag.
 
+## Sponsors
+
+A big "Thank you!" to the people that help to make this code sustainable:  
+<a href="https://github.com/SerhatG"><img src="https://github.com/SerhatG.png" width="50px" alt="SerhatG" />
+
 ## Usage
 
 ## Example pipeline
