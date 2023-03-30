@@ -7,7 +7,8 @@ Hereby the master-branch is published as the latest-tag.
 ## Sponsors
 
 A big "Thank you!" to the people that help to make this code sustainable:  
-<a href="https://github.com/SerhatG"><img src="https://github.com/SerhatG.png" width="50px" alt="SerhatG" />
+<a target="_blank" href="https://github.com/SerhatG"><img src="https://github.com/SerhatG.png" width="50px" alt="SerhatG" />
+<a target="_blank" href="https://github.com/edgedb"><img src="https://github.com/edgedb.png" width="50px" alt="EdgeDB" />
 
 ## Usage
 
