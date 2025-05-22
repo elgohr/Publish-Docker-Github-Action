@@ -192,7 +192,11 @@ build() {
   done
   if uses "${INPUT_PLATFORMS}"; then
     local PLATFORMS="--platform ${INPUT_PLATFORMS}"
-    docker buildx build --push --metadata-file metadata.json ${PLATFORMS} ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
+    local PUSHING="--push"
+    if usesBoolean "${INPUT_NO_PUSH}"; then
+      PUSHING=""
+    fi
+    docker buildx build ${PUSHING} --metadata-file metadata.json ${PLATFORMS} ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
   else
     docker build ${INPUT_BUILDOPTIONS} ${BUILDPARAMS} ${BUILD_TAGS} ${CONTEXT}
   fi

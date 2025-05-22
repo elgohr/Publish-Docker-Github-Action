@@ -696,6 +696,57 @@ EOT
   expectMockArgs ""
 }
 
+@test "it respects no_push when building multiple platforms" {
+  export GITHUB_REF='refs/heads/main'
+  export INPUT_PLATFORMS='linux/amd64,linux/arm64'
+  export INPUT_NO_PUSH='true'
+
+  cat <<EOT >> metadata.json
+{
+  "containerimage.buildinfo/linux/amd64": {
+    "frontend": "dockerfile.v0",
+    "attrs": {
+      "filename": "Dockerfile"
+    },
+    "sources": [
+      {
+        "type": "docker-image",
+        "ref": "docker.io/library/alpine:latest",
+        "pin": "sha256:7580ece7963bfa863801466c0a488f11c86f85d9988051a9f9c68cb27f6b7872"
+      }
+    ]
+  },
+  "containerimage.buildinfo/linux/arm64": {
+    "frontend": "dockerfile.v0",
+    "attrs": {
+      "filename": "Dockerfile"
+    },
+    "sources": [
+      {
+        "type": "docker-image",
+        "ref": "docker.io/library/alpine:latest",
+        "pin": "sha256:7580ece7963bfa863801466c0a488f11c86f85d9988051a9f9c68cb27f6b7872"
+      }
+    ]
+  },
+  "containerimage.descriptor": {
+    "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+    "digest": "sha256:aa2c7631cc1bbf588192ec7e55b428ad92fe63834200303f28e93444d7fc114a",
+    "size": 741
+  },
+  "containerimage.digest": "sha256:aa2c7631cc1bbf588192ec7e55b428ad92fe63834200303f28e93444d7fc114a",
+  "image.name": "my/repository:latest"
+}
+EOT
+
+  run /entrypoint.sh
+
+  expectMockCalledContains "/usr/local/mock/docker login -u USERNAME --password-stdin
+/usr/local/mock/docker buildx build --metadata-file metadata.json --platform linux/amd64,linux/arm64 -t my/repository:latest .
+/usr/local/mock/docker logout"
+  expectMockArgs ""
+}
+
 expectStdOutIs() {
   local expected=$(echo "${1}" | tr -d '\n')
   local got=$(echo "${output}" | tr -d '\n')
