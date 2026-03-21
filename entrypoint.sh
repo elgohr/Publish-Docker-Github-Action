@@ -56,6 +56,7 @@ main() {
   build
 
   if usesBoolean "${INPUT_NO_PUSH}"; then
+    echo "skipping push to registry"
     if uses "${INPUT_USERNAME}" && uses "${INPUT_PASSWORD}"; then
       docker logout
     fi

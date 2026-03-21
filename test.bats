@@ -610,7 +610,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutIs ""
+  expectStdOutIs "skipping push to registry"
 
   expectMockCalledIs "/usr/local/mock/docker login -u USERNAME --password-stdin
 /usr/local/mock/docker build -t my/repository:latest .
@@ -624,7 +624,7 @@ teardown() {
 
   run /entrypoint.sh
 
-  expectStdOutIs ""
+  expectStdOutIs "skipping push to registry"
 
   expectMockCalledIs "/usr/local/mock/docker build -t my/repository:latest ."
 }
