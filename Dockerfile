@@ -1,4 +1,4 @@
-FROM ubuntu:26.04@sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64 as runtime
+FROM ubuntu:26.04@sha256:2260313b31c8c011cd2eebe728008efac1b3982be73eb71348ea2648d2c0e09b as runtime
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y ca-certificates curl gnupg lsb-release jq \
